@@ -10,4 +10,4 @@ Route::get('/user', function (Request $request) {
     return 'This is a test log message';
 });
 
-Route::get('telegram/webhook', [TelegramBotController::class, 'handle']);
+Route::post('telegram/webhook', [TelegramBotController::class, 'handle']);
