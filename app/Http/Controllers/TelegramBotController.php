@@ -11,7 +11,7 @@ class TelegramBotController extends Controller
     {
         $message = $request->get('message');
         $chatId = $request->get('chat_id');
-
+        dd($request);
         if ($message == '/start') {
             $reply = "Welcome to the Anvar Jigga Clean Service chatbot!.👋";
             Telegram::sendMessage([
