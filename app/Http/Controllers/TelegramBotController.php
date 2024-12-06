@@ -16,7 +16,7 @@ class TelegramBotController extends Controller
         $chatId = $request->input('message.chat.id');
 
         if ($message == '/start') {
-            $reply = "Welcome to the Anvar Jigga Clean Service chatbot!.👋";
+            $reply = "Welcome to the Anvar Jigga Clean Service chatbot!.👋\n Choose from categories:";
             Telegram::sendMessage([
                 'chat_id' => $chatId,
                 'text' => $reply,
