@@ -10,7 +10,7 @@ class TelegramBotController extends Controller
 {
     public function handle(Request $request)
     {
-        Log::info('Telegram Request:', $request->all()); // Request ma'lumotlarini logga yozib qo'yish
+        Log::info('Telegram Request:', $request->all());
 
         $message = $request->input('message.text');
         $chatId = $request->input('message.chat.id');
