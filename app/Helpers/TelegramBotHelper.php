@@ -16,4 +16,12 @@ class TelegramBotHelper
             'reply_markup' => $inlineKeyboard,
         ]);
     }
+
+    public static function sendMessage($chatId, $message)
+    {
+        Telegram::sendMessage([
+            'chat_id' => $chatId,
+            'text' => $message,
+        ]);
+    }
 }
