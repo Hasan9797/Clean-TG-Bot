@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramBotHelper
@@ -13,7 +12,7 @@ class TelegramBotHelper
         Telegram::sendMessage([
             'chat_id' => $chatId,
             'text' => $message,
-            'reply_markup' => $inlineKeyboard,
+            // 'reply_markup' => $inlineKeyboard,
         ]);
     }
 
