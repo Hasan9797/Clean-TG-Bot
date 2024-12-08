@@ -8,7 +8,7 @@ class StartCommand
 {
     public static function handel($request)
     {
-        $message = $request->input('message.text');
+        $message = strval($request->input('message.text'));
         if ($message == '/start') {
             return true;
         }
@@ -18,10 +18,17 @@ class StartCommand
     public function execute($request)
     {
         $chatId = $request->input('message.chat.id');
-        $message = 'Welcome to the Anvar Jigga Clean Service chatbot!.👋\n Choose from categories:';
-        $inlineKeyboard = [];
+        $message = 'Tilni tanlang / Выберите язык:';
 
-        // TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
-        TelegramBotHelper::sendMessage($chatId, $message);
+        $inlineKeyboard = [
+            'inline_keyboard' => [
+                [
+                    ['text' => '🇷🇺 Русский', 'callback_data' => 'lang_ru'],
+                    ['text' => '🇺🇿 O‘zbek', 'callback_data' => 'lang_uz'],
+                ],
+            ],
+        ];
+
+        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
     }
 }
