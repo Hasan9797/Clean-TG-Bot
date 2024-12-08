@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Services\Telegram\Commands;
+
+use App\Helpers\TelegramBotHelper;
+use Illuminate\Support\Facades\Cache;
+
+class LanguageCommand
+{
+    private CategoriesCommand $categoriesCommand;
+    public function __construct(CategoriesCommand $categoriesCommand)
+    {
+        $this->categoriesCommand = $categoriesCommand;
+    }
+    public static function handel($request)
+    {
+        $message = strval($request->input('callback_query.data'));
+        $languages = ['lang_ru', 'lang_uz'];
+
+        if (in_array($message, $languages)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function execute($request)
+    {
+        $chatId = $request->input('callback_query.message.chat.id');
+        $language = $request->input('callback_query.data');
+
+        $cachLanguage = Cache::get("language_$chatId");
+
+        if ($cachLanguage) {
+            Cache::delete("language_$chatId");
+        }
+
+        Cache::put("language_$chatId", $language, 7200); // 2 soatga saqlash.
+
+        $this->categoriesCommand->execute($request, $language);
+    }
+}

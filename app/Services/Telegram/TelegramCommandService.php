@@ -3,6 +3,7 @@
 namespace App\Services\Telegram;
 
 use App\Services\Telegram\Commands\CategoriesCommand;
+use App\Services\Telegram\Commands\LanguageCommand;
 use App\Services\Telegram\Commands\StartCommand;
 
 class TelegramCommandService
@@ -10,7 +11,7 @@ class TelegramCommandService
 
 
     const CALLBACK_CLASS = [
-        //
+        LanguageCommand::class,
     ];
     const MESSAGE_CLASS = [
         StartCommand::class,
