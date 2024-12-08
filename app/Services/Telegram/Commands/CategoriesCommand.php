@@ -29,9 +29,12 @@ class CategoriesCommand
             'inline_keyboard' => [
                 [
                     ['text' => 'Генеральная уборка', 'callback_data' => 'service_1'],
-                    ['text' => 'Повседневная уборка', 'callback_data' => 'service_2'],
-                    ['text' => 'Уборка офиса', 'callback_data' => 'service_3'],
+                    ['text' => 'Уборка после свадьба', 'callback_data' => 'service_2'],
                 ],
+                [
+                    ['text' => 'Повседневная уборка', 'callback_data' => 'service_3'],
+                    ['text' => 'Уборка офиса', 'callback_data' => 'service_4'],
+                ]
             ],
         ];
 
@@ -39,8 +42,11 @@ class CategoriesCommand
             'inline_keyboard' => [
                 [
                     ['text' => 'Umumiy tozalash', 'callback_data' => 'service_1'],
-                    ['text' => 'Kundalik tozalash', 'callback_data' => 'service_2'],
-                    ['text' => 'Ofis tozalash', 'callback_data' => 'service_3'],
+                    ['text' => 'To`ydan keyin tozalash', 'callback_data' => 'service_2'],
+                ],
+                [
+                    ['text' => 'Kundalik tozalash', 'callback_data' => 'service_3'],
+                    ['text' => 'Ofis tozalash', 'callback_data' => 'service_4'],
                 ],
             ],
         ];
