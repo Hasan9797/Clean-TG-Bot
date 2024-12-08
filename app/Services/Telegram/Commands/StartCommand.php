@@ -15,11 +15,13 @@ class StartCommand
         return false;
     }
 
-    public static function execute($chatId)
+    public function execute($request)
     {
+        $chatId = $request->input('message.chat.id');
         $message = 'Welcome to the Anvar Jigga Clean Service chatbot!.👋\n Choose from categories:';
         $inlineKeyboard = [];
 
-        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
+        // TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
+        TelegramBotHelper::sendMessage($chatId, $message);
     }
 }
