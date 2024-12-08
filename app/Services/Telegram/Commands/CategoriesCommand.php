@@ -38,9 +38,9 @@ class CategoriesCommand
         $inlineKeyboardUz = [
             'inline_keyboard' => [
                 [
-                    ['text' => 'Генеральная уборка', 'callback_data' => 'service_1'],
-                    ['text' => 'Повседневная уборка', 'callback_data' => 'service_2'],
-                    ['text' => 'Уборка офиса', 'callback_data' => 'service_3'],
+                    ['text' => 'Umumiy tozalash', 'callback_data' => 'service_1'],
+                    ['text' => 'Kundalik tozalash', 'callback_data' => 'service_2'],
+                    ['text' => 'Ofis tozalash', 'callback_data' => 'service_3'],
                 ],
             ],
         ];
