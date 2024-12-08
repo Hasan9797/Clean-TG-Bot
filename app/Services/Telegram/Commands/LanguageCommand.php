@@ -17,10 +17,7 @@ class LanguageCommand
         $message = strval($request->input('callback_query.data'));
         $languages = ['lang_ru', 'lang_uz'];
 
-        if (in_array($message, $languages)) {
-            return true;
-        }
-        return false;
+        return in_array($message, $languages, true);
     }
 
     public function execute($request)
