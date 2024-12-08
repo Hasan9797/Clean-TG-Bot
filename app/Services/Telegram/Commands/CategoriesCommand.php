@@ -17,7 +17,7 @@ class CategoriesCommand
     }
 
 
-    public static function execute($request, $language = 'lang_uz')
+    public function execute($request, $language = 'lang_uz')
     {
         $chatId = $request->input('message.chat.id')
             ?? $request->input('callback_query.message.chat.id');
