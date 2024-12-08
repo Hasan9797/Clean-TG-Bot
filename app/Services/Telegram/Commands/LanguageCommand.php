@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\Cache;
 
 class LanguageCommand
 {
-    private CategoriesCommand $categoriesCommand;
-    public function __construct(CategoriesCommand $categoriesCommand)
-    {
-        $this->categoriesCommand = $categoriesCommand;
-    }
     public static function handel($request)
     {
         $message = strval($request->input('callback_query.data'));
@@ -33,6 +28,6 @@ class LanguageCommand
 
         Cache::put("language_$chatId", $language, 7200); // 2 soatga saqlash.
 
-        $this->categoriesCommand->execute($request, $language);
+        (new CategoriesCommand())->execute($request, $language);
     }
 }
