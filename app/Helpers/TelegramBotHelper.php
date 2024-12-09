@@ -50,29 +50,26 @@ class TelegramBotHelper
                 $message = "Iltimos, telefon raqamingizni yuboring.";
             }
 
-            // Define the keyboard with a button that requests the contact
             $replyKeyboard = [
                 [
                     [
-                        'text' => 'Kontaktni yuborish',  // Button text
-                        'request_contact' => true        // This enables the phone number sending feature
+                        'text' => 'Kontaktni yuborish',
+                        'request_contact' => true
                     ]
                 ]
             ];
 
-            // Parameters for the request to send the message and keyboard
             $params = [
                 'chat_id' => $chatId,
                 'text' => $message,
                 'reply_markup' => json_encode([
                     'keyboard' => $replyKeyboard,
-                    'resize_keyboard' => true, // Make the keyboard resizable
-                    'one_time_keyboard' => true, // Hide the keyboard after use
+                    'resize_keyboard' => true,
+                    'one_time_keyboard' => true,
                 ])
             ];
 
-            // Send the request to Telegram's API to send the message with the keyboard
-            Telegram::sendRequest('POST', 'sendMessage', $params);
+            Telegram::sendMessage($params);  // Simplified API call
         } catch (\Throwable $th) {
             self::sendMessage($chatId, $th->getMessage());
         }
