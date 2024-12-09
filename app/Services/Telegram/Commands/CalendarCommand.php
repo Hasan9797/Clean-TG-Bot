@@ -60,9 +60,11 @@ class CalendarCommand
         }
 
         $inlineKeyboard = [
-            [
-                'text' => 'Kontaktni yuborish',
-                'request_contact' => true // Kontaktni so'rash
+            'inline_keyboard' => [
+                [
+                    'text' => 'Kontaktni yuborish',
+                    'request_contact' => true // Kontaktni so'rash
+                ]
             ]
         ];
 

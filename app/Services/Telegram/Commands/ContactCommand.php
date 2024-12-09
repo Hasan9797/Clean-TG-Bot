@@ -17,23 +17,26 @@ class ContactCommand
         return false;
     }
 
-
-    public function execute($request) {}
-
-
-    public function requestPhoneNumber($chatId)
+    public function execute($request)
     {
-        $message = 'Iltimos, telefon raqamingizni yuboring yoki quyidagi tugma orqali o\'zingizning kontaktni yuboring:';
+        $chatId = $request->input('callback_query.message.chat.id');
+        $messageId = $request->input('callback_query.message.message_id');
+        $contact = $request->input('callback_query.data.contact');  // User contactni olish
 
-        // Telefon raqamini yuborish uchun inline button
-        $inlineKeyboard = [
-            [
-                'text' => 'Kontaktni yuborish',
-                'request_contact' => true // Kontaktni so'rash
-            ]
-        ];
+        // Contact mavjudligini tekshirish
+        if (isset($contact['phone_number'])) {
+            $phoneNumber = $contact['phone_number'];
+            $firstName = $contact['first_name'];
 
-        // Foydalanuvchiga xabar yuborish
-        TelegramBotHelper::sendMessage($chatId, $message, $inlineKeyboard);
+            // Foydalanuvchining telefon raqami va nomini qayd qilish
+            $message = "Sizning telefon raqamingiz: $phoneNumber\nIsmingiz: $firstName";
+
+            // Bu yerda qo'shimcha ishlar (telefonni saqlash, bazaga yuborish va h.k.)
+        } else {
+            $message = 'Kontaktni yubormadingiz. Iltimos, tugmani bosing va kontakt yuboring.';
+        }
+
+        // Javobni yuborish
+        TelegramBotHelper::sendMessage($chatId, $message);
     }
 }
