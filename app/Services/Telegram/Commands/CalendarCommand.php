@@ -80,9 +80,10 @@ class CalendarCommand
         $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
         // Hozirgi hafta yakshanbasi
-        $weekStart = strtotime('last Sunday', $currentTimestamp);
+        $weekStart = strtotime('Sunday this week', $currentTimestamp);  // Haftaning boshlanishini aniqlash
         $weekDays = [];
 
+        // Haftadagi har bir kunni olish
         for ($i = 0; $i < 7; $i++) {
             $date = date('Y-m-d', strtotime("+$i day", $weekStart));
 
@@ -97,6 +98,7 @@ class CalendarCommand
 
         $monthName = date('F Y', $currentTimestamp);
 
+        // Inline keyboard uchun boshlang'ich tugmalar
         $inlineKeyboard = [
             [
                 'text' => $monthName,
@@ -104,6 +106,7 @@ class CalendarCommand
             ]
         ];
 
+        // Haftaning kunlarini inline tugmalarga qo'shish
         foreach ($weekDays as $day) {
             $inlineKeyboard[] = [
                 'text' => $day['text'],
@@ -112,15 +115,16 @@ class CalendarCommand
         }
 
         // Keyingi hafta tugmasi
-        $nextWeekStart = strtotime('next Sunday', $currentTimestamp);
+        $nextWeekStart = strtotime('next Sunday', $currentTimestamp);  // Keyingi hafta yakshanbasi
 
         $inlineKeyboard[] = [
             'text' => 'Keyingi hafta',
             'callback_data' => "next_week_$nextWeekStart"
         ];
 
+        // Tugmalarni 2 ustunli qilish
         return [
-            'inline_keyboard' => array_chunk($inlineKeyboard, 2) // Tugmalarni 2 ustunli qilish
+            'inline_keyboard' => array_chunk($inlineKeyboard, 2)
         ];
     }
 }
