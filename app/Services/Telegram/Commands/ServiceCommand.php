@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
+use Illuminate\Support\Facades\Cache;
 
 class ServiceCommand
 {
@@ -21,7 +22,7 @@ class ServiceCommand
     {
         $chatId = $request->input('callback_query.message.chat.id');
         $messageId = $request->input('callback_query.message.message_id');
-        $language = $request->input('language') ?? 'lang_uz';
+        $language = Cache::get("language_$chatId", 'lang_uz');
 
         $messageUz = 'Vaxtni tanlang:';
         $messageRu = 'Выберите время:';
