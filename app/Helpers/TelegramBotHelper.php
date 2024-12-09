@@ -17,16 +17,17 @@ class TelegramBotHelper
         ]);
     }
 
-    public static function sendPhoneRequest($chatId, $message, $replyKeyboard = [])
+    public static function sendPhoneRequest($chatId, $message)
     {
-        // Xabar matnini tekshirish
-        if (empty($message)) {
-            Telegram::sendMessage([
-                'chat_id' => $chatId,
-                'text' => 'Xabar bo`sh',
-            ]);
-            return false;
-        }
+        // Reply keyboardni sozlash
+        $replyKeyboard = [
+            [
+                [
+                    'text' => 'Kontaktni yuborish',
+                    'request_contact' => true // Kontaktni so'rash uchun
+                ]
+            ]
+        ];
 
         // Parametrlarni massivga yig'ish
         $params = [
@@ -34,13 +35,15 @@ class TelegramBotHelper
             'text' => $message,
             'reply_markup' => json_encode([
                 'keyboard' => $replyKeyboard,
-                'resize_keyboard' => true,
+                'resize_keyboard' => true, // Klaviaturani moslashtirish
+                'one_time_keyboard' => true, // Foydalanuvchi tugmani bosgandan keyin klaviatura yo'qoladi
             ])
         ];
 
-        // `sendRequest` metodini to'g'ri chaqirish
+        // `sendMessage` metodini to'g'ri chaqirish
         Telegram::sendRequest('POST', 'sendMessage', $params); // JSON formatda yuborish
     }
+
 
 
     public static function editMessageAndInlineKeyboard($chatId, $messageId, $message, $inlineKeyboard = [])

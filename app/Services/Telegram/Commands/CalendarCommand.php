@@ -27,7 +27,6 @@ class CalendarCommand
         $language = Cache::get("language_$chatId", 'lang_uz');
 
         $InlineKeyboard = [];
-        $message = '';
 
         if (preg_match('/next_week_/', $data)) {
             $message = 'Vaxtni tanlang:';
@@ -59,17 +58,8 @@ class CalendarCommand
             $message = $messageRu;
         }
 
-        $replyKeyboard = [
-            [
-                [
-                    'text' => 'Kontaktni yuborish',
-                    'request_contact' => true // Kontaktni so'rash uchun
-                ]
-            ]
-        ];
-
         // TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::sendPhoneRequest($chatId, $message, $replyKeyboard);
+        TelegramBotHelper::sendPhoneRequest($chatId, $message);
     }
 
 
