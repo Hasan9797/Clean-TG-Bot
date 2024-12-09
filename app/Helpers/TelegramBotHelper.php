@@ -17,8 +17,13 @@ class TelegramBotHelper
         ]);
     }
 
-    public static function sendPhoneRequest($chatId)
+    public static function sendPhoneRequest($chatId, $message)
     {
+        if (empty($message)) {
+            // Agar matn bo'lmasa, default matn yuborilsin
+            $message = "Iltimos, telefon raqamingizni yuboring.";
+        }
+
         // Reply keyboardni sozlash
         $replyKeyboard = [
             [
@@ -32,7 +37,7 @@ class TelegramBotHelper
         // Parametrlarni massivga yig'ish
         $params = [
             'chat_id' => $chatId,
-            'text' => 'Iltimos, telefon raqamingizni yuboring yoki quyidagi tugma orqali o\'zingizning kontaktni yuboring:',
+            'text' => $message, // Yuboriladigan matn
             'reply_markup' => json_encode([
                 'keyboard' => $replyKeyboard,
                 'resize_keyboard' => true, // Klaviaturani moslashtirish
@@ -43,6 +48,7 @@ class TelegramBotHelper
         // `sendMessage` metodini to'g'ri chaqirish
         Telegram::sendRequest('POST', 'sendMessage', $params); // JSON formatda yuborish
     }
+
 
 
 
