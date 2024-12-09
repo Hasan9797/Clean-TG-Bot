@@ -76,7 +76,7 @@ class CalendarCommand
         // Hozirgi vaqtdan foydalanish
         $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
-        // Hozirgi hafta yakshanbasi
+        // Hozirgi hafta dushanbasi
         $weekStart = strtotime('monday this week', $currentTimestamp);  // Haftaning boshlanishini aniqlash
         $weekDays = [];
 
@@ -111,8 +111,8 @@ class CalendarCommand
             ];
         }
 
-        // Keyingi hafta tugmasi
-        $nextWeekStart = strtotime('next Sunday', $currentTimestamp);  // Keyingi hafta yakshanbasi
+        // Keyingi hafta tugmasi (dushanbadan boshlash)
+        $nextWeekStart = strtotime('next monday', $currentTimestamp);  // Keyingi hafta dushanbasi
 
         $inlineKeyboard[] = [
             'text' => 'Keyingi hafta',
