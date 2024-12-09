@@ -28,6 +28,7 @@ class CalendarCommand
         $InlineKeyboard = [];
         $message = '';
 
+        // Tekshiruvni yaxshilash
         if (preg_match('/next_week/', $data)) {
             $message = 'Vaxtni tanlang:';
             $messageRu = 'Выберите время:';
@@ -35,12 +36,24 @@ class CalendarCommand
             if (strval($language) === 'lang_ru') {
                 $message = $messageRu;
             }
-            $currentTimeStump = explode('_', $data)[2];
-            $InlineKeyboard = $this->sendCalendar(intval($currentTimeStump));
+
+            // Tekshiruv qo'shish
+            $dataParts = explode('_', $data);
+            if (isset($dataParts[2])) {
+                $currentTimeStump = intval($dataParts[2]);
+            } else {
+                // Xatolik qaytarish
+                $message = 'Xatolik yuz berdi. Iltimos, qayta urunib ko\'ring.';
+                TelegramBotHelper::sendMessage($chatId, $message);
+                return false;
+            }
+
+            $InlineKeyboard = $this->sendCalendar($currentTimeStump);
             TelegramBotHelper::editMessageAndInlineKeyboard($chatId, $messageId, $message, $InlineKeyboard);
             return true;
         }
 
+        // Telefon raqamini so'rash
         $message = 'Tel Raqaminggizni yuboring:';
         $messageRu = 'Отправьте свой номер телефона:';
 
@@ -55,6 +68,7 @@ class CalendarCommand
 
     public static function sendCalendar($currentTimestamp = null)
     {
+        // Hozirgi vaqtdan foydalanish
         $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
         // Hozirgi hafta yakshanbasi
@@ -89,6 +103,7 @@ class CalendarCommand
             ];
         }
 
+        // Keyingi hafta tugmasi
         $nextWeekStart = strtotime('next Sunday', $currentTimestamp);
 
         $inlineKeyboard[] = [
