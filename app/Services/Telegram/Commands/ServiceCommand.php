@@ -29,15 +29,28 @@ class ServiceCommand
 
         // Sanalar uchun inline keyboard
         $keyboard = Keyboard::make()
-        ->inline()
-        ->row([
-            Keyboard::inlineButton(['text' => '2024-12-01', 'callback_data' => '2024-12-01']),
-            Keyboard::inlineButton(['text' => '2024-12-02', 'callback_data' => '2024-12-02'])
-        ])
-        ->row([
-            Keyboard::inlineButton(['text' => '2024-12-03', 'callback_data' => '2024-12-03']),
-            Keyboard::inlineButton(['text' => '2024-12-04', 'callback_data' => '2024-12-04'])
-        ]);
+            ->inline()
+            ->row([
+                Keyboard::inlineButton(['text' => 'Yanvar', 'callback_data' => 'month:01']),
+                Keyboard::inlineButton(['text' => 'Fevral', 'callback_data' => 'month:02']),
+                Keyboard::inlineButton([
+                    'text' => 'Mart',
+                    'callback_data' => 'month:03'
+                ]),
+            ])
+            ->row([
+                Keyboard::inlineButton(['text' => 'Aprel', 'callback_data' => 'month:04']),
+                Keyboard::inlineButton(['text' => 'May', 'callback_data' => 'month:05']),
+                Keyboard::inlineButton([
+                    'text' => 'Iyun',
+                    'callback_data' => 'month:06'
+                ]),
+            ])
+            ->row([
+                Keyboard::inlineButton(['text' => '<<', 'callback_data' => 'prev_year']),
+                Keyboard::inlineButton(['text' => 'Yilni tanlash', 'callback_data' => 'select_year']),
+                Keyboard::inlineButton(['text' => '>>', 'callback_data' => 'next_year']),
+            ]);
 
 
         $message = $messageUz;

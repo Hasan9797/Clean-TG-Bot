@@ -28,12 +28,12 @@ class TelegramBotHelper
     public static function deleteMessage($chatId, $messageId)
     {
         try {
-            $response = Telegram::deleteMessage([
+            Telegram::deleteMessage([
                 'chat_id' => $chatId,
                 'message_id' => $messageId,
             ]);
 
-            return $response;
+            return true;
         } catch (\Exception $e) {
             Log::error('Telegram deleteMessage error:', ['message' => $e->getMessage()]);
             return false;
