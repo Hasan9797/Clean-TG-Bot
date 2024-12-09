@@ -21,7 +21,7 @@ class ServiceCommand
     {
         $chatId = $request->input('callback_query.message.chat.id');
         $messageId = $request->input('callback_query.message.id');
-        $language = $request->input('language');
+        $language = $request->input('language') ?? 'lang_uz';
 
         $messageUz = 'Vaxtni tanlang:';
         $messageRu = 'Выберите время:';

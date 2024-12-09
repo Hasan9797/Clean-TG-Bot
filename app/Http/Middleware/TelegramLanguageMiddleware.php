@@ -14,7 +14,7 @@ class TelegramLanguageMiddleware
             $chatId = $request->input('message.chat.id')
                 ?? $request->input('callback_query.message.chat.id');
 
-            $message = strval($request->input('message.text')) ?? null;
+            $message = strval($request->input('message.text'));
 
             if($message == '/start'){
                 return $next($request);
