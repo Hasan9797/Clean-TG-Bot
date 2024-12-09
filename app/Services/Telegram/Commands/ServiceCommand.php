@@ -70,10 +70,10 @@ class ServiceCommand
                 Keyboard::inlineButton(['text' => $monthName, 'callback_data' => 'ignore']) // Oyni ko'rsatish (bosilmaydi)
             )
             ->row(array_map(fn($day) => Keyboard::inlineButton($day), $weekDays)) // Haftaning kunlari
-            ->row([
+            ->row(
                 Keyboard::inlineButton(['text' => '<< Oldingi hafta', 'callback_data' => 'prev_week']),
                 Keyboard::inlineButton(['text' => 'Keyingi hafta >>', 'callback_data' => 'next_week'])
-            ]);
+            );
 
         return $keyboard;
     }
