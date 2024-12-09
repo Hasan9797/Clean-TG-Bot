@@ -61,7 +61,7 @@ class CalendarCommand
     {
         $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
-        $weekStart = strtotime('sunday this week', $currentTimestamp);
+        $weekStart = strtotime('last Sunday', $currentTimestamp);
         $weekDays = [];
 
         for ($i = 0; $i < 7; $i++) {
@@ -90,7 +90,6 @@ class CalendarCommand
                 'callback_data' => $day['callback_data']
             ];
         }
-
         $nextWeekStart = strtotime('next Sunday', $currentTimestamp);
 
         $inlineKeyboard[] = [
