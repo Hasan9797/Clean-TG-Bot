@@ -28,30 +28,8 @@ class ServiceCommand
         $messageRu = 'Выберите время:';
 
         // Sanalar uchun inline keyboard
-        $keyboard = Keyboard::make()
-            ->inline()
-            ->row([
-                Keyboard::inlineButton(['text' => 'Yanvar', 'callback_data' => 'month:01']),
-                Keyboard::inlineButton(['text' => 'Fevral', 'callback_data' => 'month:02']),
-                Keyboard::inlineButton([
-                    'text' => 'Mart',
-                    'callback_data' => 'month:03'
-                ]),
-            ])
-            ->row([
-                Keyboard::inlineButton(['text' => 'Aprel', 'callback_data' => 'month:04']),
-                Keyboard::inlineButton(['text' => 'May', 'callback_data' => 'month:05']),
-                Keyboard::inlineButton([
-                    'text' => 'Iyun',
-                    'callback_data' => 'month:06'
-                ]),
-            ])
-            ->row([
-                Keyboard::inlineButton(['text' => '<<', 'callback_data' => 'prev_year']),
-                Keyboard::inlineButton(['text' => 'Yilni tanlash', 'callback_data' => 'select_year']),
-                Keyboard::inlineButton(['text' => '>>', 'callback_data' => 'next_year']),
-            ]);
 
+        $keyboard = $this->sendCalendar();
 
         $message = $messageUz;
 
@@ -62,5 +40,41 @@ class ServiceCommand
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
         TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $keyboard);
+    }
+
+
+    public function sendCalendar()
+    {
+        // Agar sana ko'rsatilmagan bo'lsa, hozirgi sanani olish
+        $currentDate = date('Y-m-d');
+        $currentTimestamp = strtotime($currentDate);
+
+        // Hafta kunlari va oyning bosh sanasini aniqlash
+        $weekStart = strtotime('last Sunday', $currentTimestamp); // Haftaning boshlanishi
+        $weekDays = [];
+
+        for ($i = 0; $i < 7; $i++) { // Haftaning har bir kuni
+            $date = date('Y-m-d', strtotime("+$i day", $weekStart));
+            $weekDays[] = [
+                'text' => date('d', strtotime($date)), // Tugmada faqat kun
+                'callback_data' => "date:$date",      // callback_data uchun to'liq sana
+            ];
+        }
+
+        // Oyning nomini olish
+        $monthName = date('F Y', $currentTimestamp);
+
+        // Inline keyboard yaratish
+        $keyboard = Keyboard::make()->inline()
+            ->row(
+                Keyboard::inlineButton(['text' => $monthName, 'callback_data' => 'ignore']) // Oyni ko'rsatish (bosilmaydi)
+            )
+            ->row(array_map(fn($day) => Keyboard::inlineButton($day), $weekDays)) // Haftaning kunlari
+            ->row([
+                Keyboard::inlineButton(['text' => '<< Oldingi hafta', 'callback_data' => 'prev_week']),
+                Keyboard::inlineButton(['text' => 'Keyingi hafta >>', 'callback_data' => 'next_week'])
+            ]);
+
+        return $keyboard;
     }
 }
