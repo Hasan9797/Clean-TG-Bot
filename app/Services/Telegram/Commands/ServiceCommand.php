@@ -8,7 +8,7 @@ class ServiceCommand
 {
     public static function handel($request)
     {
-        $message = explode('_', strval($request->input('message.text')));
+        $message = explode('_', strval($request->input('callback_query.data')));
 
         if (count($message) === 2 && strval($message[0]) === 'service') {
             return true;
