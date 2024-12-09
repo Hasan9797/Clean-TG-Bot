@@ -9,12 +9,12 @@ class ContactCommand
 {
     public static function handel($request)
     {
-        $message = $request->input('callback_query.data');
+        $contact = $request->input('message.contact');
 
-        if (preg_match('#date:|next_week#', $message)) {
-            return true;
+        if (!$contact) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public function execute($request)
