@@ -17,41 +17,6 @@ class TelegramBotHelper
         ]);
     }
 
-    public static function sendPhoneRequest($chatId, $message)
-    {
-        if (empty($message)) {
-            // Agar matn bo'lmasa, default matn yuborilsin
-            $message = "Iltimos, telefon raqamingizni yuboring.";
-        }
-
-        // Reply keyboardni sozlash
-        $replyKeyboard = [
-            [
-                [
-                    'text' => 'Kontaktni yuborish',
-                    'request_contact' => true // Kontaktni so'rash uchun
-                ]
-            ]
-        ];
-
-        // Parametrlarni massivga yig'ish
-        $params = [
-            'chat_id' => $chatId,
-            'text' => $message, // Yuboriladigan matn
-            'reply_markup' => json_encode([
-                'keyboard' => $replyKeyboard,
-                'resize_keyboard' => true, // Klaviaturani moslashtirish
-                'one_time_keyboard' => true, // Foydalanuvchi tugmani bosgandan keyin klaviatura yo'qoladi
-            ])
-        ];
-
-        // `sendMessage` metodini to'g'ri chaqirish
-        Telegram::sendRequest('POST', 'sendMessage', $params); // JSON formatda yuborish
-    }
-
-
-
-
     public static function editMessageAndInlineKeyboard($chatId, $messageId, $message, $inlineKeyboard = [])
     {
         Telegram::editMessageText([
@@ -76,5 +41,36 @@ class TelegramBotHelper
             'chat_id' => $chatId,
             'message_id' => $messageId,
         ]);
+    }
+
+    public static function sendPhoneRequest($chatId, $message)
+    {
+        if (empty($message)) {
+            $message = "Iltimos, telefon raqamingizni yuboring.";
+        }
+
+        // Define the keyboard with a button that requests the contact
+        $replyKeyboard = [
+            [
+                [
+                    'text' => 'Kontaktni yuborish',  // Button text
+                    'request_contact' => true        // This enables the phone number sending feature
+                ]
+            ]
+        ];
+
+        // Parameters for the request to send the message and keyboard
+        $params = [
+            'chat_id' => $chatId,
+            'text' => $message,
+            'reply_markup' => json_encode([
+                'keyboard' => $replyKeyboard,
+                'resize_keyboard' => true, // Make the keyboard resizable
+                'one_time_keyboard' => true, // Hide the keyboard after use
+            ])
+        ];
+
+        // Send the request to Telegram's API to send the message with the keyboard
+        Telegram::sendRequest('POST', 'sendMessage', $params);
     }
 }
