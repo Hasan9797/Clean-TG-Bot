@@ -59,17 +59,17 @@ class CalendarCommand
             $message = $messageRu;
         }
 
-        $inlineKeyboard = [
-            'inline_keyboard' => [
+        $replyKeyboard = [
+            [
                 [
                     'text' => 'Kontaktni yuborish',
-                    'request_contact' => true // Kontaktni so'rash
+                    'request_contact' => true // Kontaktni so'rash uchun
                 ]
             ]
         ];
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
+        TelegramBotHelper::sendPhoneRequest($chatId, $message, $replyKeyboard);
     }
 
 
