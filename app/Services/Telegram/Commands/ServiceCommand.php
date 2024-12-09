@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
+use Telegram\Bot\Keyboard\Keyboard;
 
 class ServiceCommand
 {
@@ -26,23 +27,18 @@ class ServiceCommand
         $messageUz = 'Vaxtni tanlang:';
         $messageRu = 'Выберите время:';
 
-        $inlineKeyboard = [
-            'inline_keyboard' => [
-                [
-                    ['text' => '1', 'callback_data' => 'day_1'],
-                    ['text' => '2', 'callback_data' => 'day_2'],
-                    ['text' => '3', 'callback_data' => 'day_3'],
-                ],
-                [
-                    ['text' => '4', 'callback_data' => 'day_4'],
-                    ['text' => '5', 'callback_data' => 'day_5'],
-                    ['text' => '6', 'callback_data' => 'day_6'],
-                ],
-                [
-                    ['text' => 'Next ➡️', 'callback_data' => 'select_month'],
-                ],
-            ],
-        ];
+        // Sanalar uchun inline keyboard
+        $keyboard = Keyboard::make()
+        ->inline()
+        ->row([
+            Keyboard::inlineButton(['text' => '2024-12-01', 'callback_data' => '2024-12-01']),
+            Keyboard::inlineButton(['text' => '2024-12-02', 'callback_data' => '2024-12-02'])
+        ])
+        ->row([
+            Keyboard::inlineButton(['text' => '2024-12-03', 'callback_data' => '2024-12-03']),
+            Keyboard::inlineButton(['text' => '2024-12-04', 'callback_data' => '2024-12-04'])
+        ]);
+
 
         $message = $messageUz;
 
@@ -52,6 +48,6 @@ class ServiceCommand
         }
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
+        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $keyboard);
     }
 }
