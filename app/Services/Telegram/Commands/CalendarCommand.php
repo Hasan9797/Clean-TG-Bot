@@ -3,15 +3,14 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
-use Telegram\Bot\Keyboard\Keyboard;
 
 class CalendarCommand
 {
     public static function handel($request)
     {
-        $message = explode('_', strval($request->input('callback_query.data')));
+        $message = $request->input('callback_query.data');
 
-        if (count($message) === 2 && strval($message[0]) === 'service') {
+        if (preg_match('#date:|next_week#', $message)) {
             return true;
         }
         return false;
@@ -22,59 +21,81 @@ class CalendarCommand
     {
         $chatId = $request->input('callback_query.message.chat.id');
         $messageId = $request->input('callback_query.message.message_id');
+        $data = $request->input('callback_query.data');
+
         $language = $request->input('language') ?? 'lang_uz';
 
-        $messageUz = 'Vaxtni tanlang:';
-        $messageRu = 'Выберите время:';
+        $InlineKeyboard = [];
+        $message = '';
 
-        // Sanalar uchun inline keyboard
+        if (preg_match('/next_week/', $data)) {
+            $InlineKeyboard = $this->sendCalendar();
+            $message = 'Vaxtni tanlang:';
+            $messageRu = 'Выберите время:';
 
-        $keyboard = $this->sendCalendar();
+            if (strval($language) === 'lang_ru') {
+                $message = $messageRu;
+            }
+            $currentTimeStump = explode('_', $data)[2];
+            $InlineKeyboard = $this->sendCalendar($currentTimeStump);
+            TelegramBotHelper::editMessageAndInlineKeyboard($chatId, $messageId, $message, $InlineKeyboard);
+            return true;
+        }
 
-        $message = $messageUz;
-
+        $message = 'Tel Raqaminggizni yuboring:';
+        $messageRu = 'Отправьте свой номер телефона:';
 
         if (strval($language) === 'lang_ru') {
             $message = $messageRu;
         }
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $keyboard);
+        TelegramBotHelper::sendMessage($chatId, $message);
     }
 
 
-    public function sendCalendar()
+    public static function sendCalendar($currentTimestamp = null)
     {
-        // Agar sana ko'rsatilmagan bo'lsa, hozirgi sanani olish
-        $currentDate = date('Y-m-d');
-        $currentTimestamp = strtotime($currentDate);
+        $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
-        // Hafta kunlari va oyning bosh sanasini aniqlash
-        $weekStart = strtotime('last Sunday', $currentTimestamp); // Haftaning boshlanishi
+        $weekStart = strtotime('last Sunday', $currentTimestamp);
         $weekDays = [];
 
-        for ($i = 0; $i < 7; $i++) { // Haftaning har bir kuni
+        for ($i = 0; $i < 7; $i++) {
             $date = date('Y-m-d', strtotime("+$i day", $weekStart));
-            $weekDays[] = [
-                'text' => date('d', strtotime($date)), // Tugmada faqat kun
-                'callback_data' => "date:$date",      // callback_data uchun to'liq sana
-            ];
+
+            if (strtotime($date) >= $currentTimestamp) {
+                $weekDays[] = [
+                    'text' => date('d', strtotime($date)),
+                    'callback_data' => "date:$date",
+                ];
+            }
         }
 
-        // Oyning nomini olish
         $monthName = date('F Y', $currentTimestamp);
 
-        // Inline keyboard yaratish
-        $keyboard = Keyboard::make()->inline()
-            ->row(
-                Keyboard::inlineButton(['text' => $monthName, 'callback_data' => 'ignore']) // Oyni ko'rsatish (bosilmaydi)
-            )
-            ->row(array_map(fn($day) => Keyboard::inlineButton($day), $weekDays)) // Haftaning kunlari
-            ->row([
-                Keyboard::inlineButton(['text' => '<< Oldingi hafta', 'callback_data' => 'prev_week']),
-                Keyboard::inlineButton(['text' => 'Keyingi hafta >>', 'callback_data' => 'next_week'])
-            ]);
+        $inlineKeyboard = [
+            [
+                'text' => $monthName,
+                'callback_data' => 'ignore'
+            ]
+        ];
 
-        return $keyboard;
+        foreach ($weekDays as $day) {
+            $inlineKeyboard[] = [
+                'text' => $day['text'],
+                'callback_data' => $day['callback_data']
+            ];
+        }
+        $nextWeekTimestamp = strtotime(date('Y-m-d', strtotime('next Sunday')));
+
+        $inlineKeyboard[] = [
+            'text' => 'Keyingi hafta',
+            'callback_data' => "next_week_$nextWeekTimestamp"
+        ];
+
+        return [
+            'inline_keyboard' => array_chunk($inlineKeyboard, 2) // Tugmalarni 2 ustunli qilish
+        ];
     }
 }

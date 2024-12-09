@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram;
 
+use App\Services\Telegram\Commands\CalendarCommand;
 use App\Services\Telegram\Commands\LanguageCommand;
 use App\Services\Telegram\Commands\ServiceCommand;
 use App\Services\Telegram\Commands\ServicesCommand;
@@ -13,7 +14,8 @@ class TelegramCommandService
 
     const CALLBACK_CLASS = [
         LanguageCommand::class,
-        ServiceCommand::class
+        ServiceCommand::class,
+        CalendarCommand::class
     ];
     const MESSAGE_CLASS = [
         StartCommand::class,

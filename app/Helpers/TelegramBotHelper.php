@@ -17,6 +17,16 @@ class TelegramBotHelper
         ]);
     }
 
+    public static function editMessageAndInlineKeyboard($chatId, $messageId, $message, $inlineKeyboard)
+    {
+        Telegram::editMessageText([
+            'chat_id' => $chatId,
+            'message_id' => $messageId,
+            'text' => $message,
+            'reply_markup' => json_encode($inlineKeyboard)
+        ]);
+    }
+
     public static function sendMessage($chatId, $message)
     {
         Telegram::sendMessage([
