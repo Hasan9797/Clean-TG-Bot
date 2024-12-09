@@ -4,7 +4,7 @@ namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
 
-class CategoriesCommand
+class ServicesCommand
 {
     public static function handel($request)
     {
@@ -22,8 +22,8 @@ class CategoriesCommand
         $chatId = $request->input('message.chat.id')
             ?? $request->input('callback_query.message.chat.id');
 
-        $messageId = $request->input('message.id')
-            ?? $request->input('callback_query.message.id');
+        $messageId = $request->input('message.message_id')
+            ?? $request->input('callback_query.message.message_id');
 
         $messageUz = 'Hizmat turlarini tanlang:';
         $messageRu = 'Выберите типы услуг:';

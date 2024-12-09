@@ -2,8 +2,9 @@
 
 namespace App\Services\Telegram;
 
-use App\Services\Telegram\Commands\CategoriesCommand;
 use App\Services\Telegram\Commands\LanguageCommand;
+use App\Services\Telegram\Commands\ServiceCommand;
+use App\Services\Telegram\Commands\ServicesCommand;
 use App\Services\Telegram\Commands\StartCommand;
 
 class TelegramCommandService
@@ -12,10 +13,11 @@ class TelegramCommandService
 
     const CALLBACK_CLASS = [
         LanguageCommand::class,
+        ServiceCommand::class
     ];
     const MESSAGE_CLASS = [
         StartCommand::class,
-        CategoriesCommand::class,
+        ServicesCommand::class,
     ];
 
     public function getClass($request)

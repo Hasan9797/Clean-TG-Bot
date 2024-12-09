@@ -2,7 +2,6 @@
 
 namespace App\Services\Telegram\Commands;
 
-use App\Helpers\TelegramBotHelper;
 use Illuminate\Support\Facades\Cache;
 
 class LanguageCommand
@@ -28,6 +27,6 @@ class LanguageCommand
 
         Cache::put("language_$chatId", $language, 7200); // 2 soatga saqlash.
 
-        (new CategoriesCommand())->execute($request, $language);
+        (new ServicesCommand())->execute($request, $language);
     }
 }
