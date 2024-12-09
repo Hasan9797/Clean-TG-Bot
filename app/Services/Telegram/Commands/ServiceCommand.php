@@ -21,7 +21,7 @@ class ServiceCommand
     public function execute($request)
     {
         $chatId = $request->input('callback_query.message.chat.id');
-        $messageId = $request->input('callback_query.message.id');
+        $messageId = $request->input('callback_query.message.message_id');
         $language = $request->input('language') ?? 'lang_uz';
 
         $messageUz = 'Vaxtni tanlang:';
