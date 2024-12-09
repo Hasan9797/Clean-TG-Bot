@@ -87,11 +87,11 @@ class CalendarCommand
                 'callback_data' => $day['callback_data']
             ];
         }
-        $nextWeekTimestamp = strtotime(date('Y-m-d', strtotime('next Sunday')));
+        $nextWeekStart = strtotime('next Sunday', $currentTimestamp);
 
         $inlineKeyboard[] = [
             'text' => 'Keyingi hafta',
-            'callback_data' => "next_week_$nextWeekTimestamp"
+            'callback_data' => "next_week_$nextWeekStart"
         ];
 
         return [
