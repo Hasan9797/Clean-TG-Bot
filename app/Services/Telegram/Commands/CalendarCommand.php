@@ -11,7 +11,7 @@ class CalendarCommand
     {
         $message = $request->input('callback_query.data');
 
-        if (preg_match('#date:|next_week#', $message)) {
+        if (preg_match('#date:|next_week_#', $message)) {
             return true;
         }
         return false;
@@ -29,8 +29,7 @@ class CalendarCommand
         $InlineKeyboard = [];
         $message = '';
 
-        // Tekshiruvni yaxshilash
-        if (preg_match('/next_week/', $data)) {
+        if (preg_match('/next_week_/', $data)) {
             $message = 'Vaxtni tanlang:';
             $messageRu = 'Выберите время:';
 
@@ -38,7 +37,6 @@ class CalendarCommand
                 $message = $messageRu;
             }
 
-            // Tekshiruv qo'shish
             $dataParts = explode('_', $data);
             if (isset($dataParts[2])) {
                 $currentTimeStump = intval($dataParts[2]);
@@ -49,7 +47,6 @@ class CalendarCommand
                 return false;
             }
 
-            // To'g'ri vaqtni oling
             $InlineKeyboard = $this->sendCalendar($currentTimeStump);
             TelegramBotHelper::editMessageAndInlineKeyboard($chatId, $messageId, $message, $InlineKeyboard);
             return true;
@@ -80,7 +77,7 @@ class CalendarCommand
         $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
         // Hozirgi hafta yakshanbasi
-        $weekStart = strtotime('Sunday this week', $currentTimestamp);  // Haftaning boshlanishini aniqlash
+        $weekStart = strtotime('monday this week', $currentTimestamp);  // Haftaning boshlanishini aniqlash
         $weekDays = [];
 
         // Haftadagi har bir kunni olish
