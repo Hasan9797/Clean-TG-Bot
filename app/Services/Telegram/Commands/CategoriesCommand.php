@@ -22,6 +22,9 @@ class CategoriesCommand
         $chatId = $request->input('message.chat.id')
             ?? $request->input('callback_query.message.chat.id');
 
+        $messageId = $request->input('message.id')
+            ?? $request->input('callback_query.message.id');
+
         $messageUz = 'Hizmat turlarini tanlang:';
         $messageRu = 'Выберите типы услуг:';
 
@@ -59,6 +62,7 @@ class CategoriesCommand
             $inlineKeyboard = $inlineKeyboardRu;
         }
 
+        TelegramBotHelper::deleteMessage($chatId, $messageId);
         TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
     }
 }

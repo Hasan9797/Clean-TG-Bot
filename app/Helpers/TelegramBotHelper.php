@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramBotHelper
@@ -22,5 +23,20 @@ class TelegramBotHelper
             'chat_id' => $chatId,
             'text' => $message,
         ]);
+    }
+
+    public static function deleteMessage($chatId, $messageId)
+    {
+        try {
+            $response = Telegram::deleteMessage([
+                'chat_id' => $chatId,
+                'message_id' => $messageId,
+            ]);
+
+            return $response;
+        } catch (\Exception $e) {
+            Log::error('Telegram deleteMessage error:', ['message' => $e->getMessage()]);
+            return false;
+        }
     }
 }
