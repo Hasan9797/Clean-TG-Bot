@@ -17,7 +17,7 @@ class TelegramBotHelper
         ]);
     }
 
-    public static function sendPhoneRequest($chatId, $message)
+    public static function sendPhoneRequest($chatId)
     {
         // Reply keyboardni sozlash
         $replyKeyboard = [
@@ -32,7 +32,7 @@ class TelegramBotHelper
         // Parametrlarni massivga yig'ish
         $params = [
             'chat_id' => $chatId,
-            'text' => $message,
+            'text' => 'Iltimos, telefon raqamingizni yuboring yoki quyidagi tugma orqali o\'zingizning kontaktni yuboring:',
             'reply_markup' => json_encode([
                 'keyboard' => $replyKeyboard,
                 'resize_keyboard' => true, // Klaviaturani moslashtirish
