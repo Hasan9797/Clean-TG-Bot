@@ -28,8 +28,8 @@ class CalendarCommand
         $InlineKeyboard = [];
         $message = '';
 
-        // Tekshiruvni yaxshilash
-        if (preg_match('/next_week/', $data)) {
+        if ($data === 'next_week') {
+
             $message = 'Vaxtni tanlang:';
             $messageRu = 'Выберите время:';
 
@@ -37,18 +37,7 @@ class CalendarCommand
                 $message = $messageRu;
             }
 
-            // Tekshiruv qo'shish
-            $dataParts = explode('_', $data);
-            if (isset($dataParts[2])) {
-                $currentTimeStump = intval($dataParts[2]);
-            } else {
-                // Xatolik qaytarish
-                $message = 'Xatolik yuz berdi. Iltimos, qayta urunib ko\'ring.';
-                TelegramBotHelper::sendMessage($chatId, $message);
-                return false;
-            }
-
-            $InlineKeyboard = $this->sendCalendar($currentTimeStump);
+            $InlineKeyboard = $this->sendCalendar(true);
             TelegramBotHelper::editMessageAndInlineKeyboard($chatId, $messageId, $message, $InlineKeyboard);
             return true;
         }
@@ -66,10 +55,10 @@ class CalendarCommand
     }
 
 
-    public static function sendCalendar($currentTimestamp = null)
+    public static function sendCalendar($currentTimestamp = false)
     {
-        // Hozirgi vaqtdan foydalanish
-        $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
+        $currentTimestamp = $currentTimestamp ? strtotime('next Sunday', strtotime(date('Y-m-d'))) :
+            strtotime(date('Y-m-d'));
 
         // Hozirgi hafta yakshanbasi
         $weekStart = strtotime('sunday this week', $currentTimestamp);
@@ -103,12 +92,9 @@ class CalendarCommand
             ];
         }
 
-        // Keyingi hafta tugmasi
-        $nextWeekStart = strtotime('next Sunday', $currentTimestamp);
-
         $inlineKeyboard[] = [
             'text' => 'Keyingi hafta',
-            'callback_data' => "next_week_$nextWeekStart"
+            'callback_data' => "next_week"
         ];
 
         return [
