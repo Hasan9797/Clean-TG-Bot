@@ -29,7 +29,7 @@ class ServiceCommand
 
         // Sanalar uchun inline keyboard
 
-        $keyboard = $this->sendCalendar();
+        $inlineKeyboard = $this->sendCalendar();
 
         $message = $messageUz;
 
@@ -39,7 +39,7 @@ class ServiceCommand
         }
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $keyboard);
+        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
     }
 
 
@@ -48,14 +48,14 @@ class ServiceCommand
         $currentDate = $currentDate ?: date('Y-m-d');
         $currentTimestamp = strtotime($currentDate);
 
-        $weekStart = strtotime('last Sunday', $currentTimestamp); 
+        $weekStart = strtotime('last Sunday', $currentTimestamp);
         $weekDays = [];
 
-        for ($i = 0; $i < 7; $i++) { 
+        for ($i = 0; $i < 7; $i++) {
             $date = date('Y-m-d', strtotime("+$i day", $weekStart));
             $weekDays[] = [
-                'text' => date('d', strtotime($date)), 
-                'callback_data' => "date:$date",      
+                'text' => date('d', strtotime($date)),
+                'callback_data' => "date:$date",
             ];
         }
 
@@ -84,6 +84,8 @@ class ServiceCommand
             'callback_data' => 'next_week'
         ];
 
-        return $inlineKeyboard;
+        return [
+            'inline_keyboard' => array_chunk($inlineKeyboard, 2) // Tugmalarni 2 ustunli qilish
+        ];
     }
 }
