@@ -55,16 +55,22 @@ class CalendarCommand
             return true;
         }
 
-        // Telefon raqamini so'rash
-        $message = 'Tel Raqaminggizni yuboring:';
-        $messageRu = 'Отправьте свой номер телефона:';
+        $message = 'Iltimos, telefon raqamingizni yuboring yoki quyidagi tugma orqali o\'zingizning kontaktni yuboring:';
+        $messageRu = 'Пожалуйста, отправьте свой номер телефона или отправьте контактную информацию, используя кнопку ниже:';
 
         if (strval($language) === 'lang_ru') {
             $message = $messageRu;
         }
 
+        $inlineKeyboard = [
+            [
+                'text' => 'Kontaktni yuborish',
+                'request_contact' => true // Kontaktni so'rash
+            ]
+        ];
+
         TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::sendMessage($chatId, $message);
+        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
     }
 
 
@@ -74,7 +80,7 @@ class CalendarCommand
         $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
         // Hozirgi hafta yakshanbasi
-        $weekStart = strtotime('sunday this week', $currentTimestamp);
+        $weekStart = strtotime('last Sunday', $currentTimestamp);
         $weekDays = [];
 
         for ($i = 0; $i < 7; $i++) {
