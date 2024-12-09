@@ -24,11 +24,12 @@ class CalendarCommand
         $messageId = $request->input('callback_query.message.message_id');
         $data = $request->input('callback_query.data');
 
-        $language = Cache::get("language_$chatId", 'lang_uz');
+        $language = $request->input('language') ?? 'lang_uz';
 
         $InlineKeyboard = [];
         $message = '';
 
+        // Tekshiruvni yaxshilash
         if (preg_match('/next_week/', $data)) {
             $message = 'Vaxtni tanlang:';
             $messageRu = 'Выберите время:';
@@ -37,14 +38,24 @@ class CalendarCommand
                 $message = $messageRu;
             }
 
-            $currentTimeStump = explode('_', $data)[2];
+            // Tekshiruv qo'shish
+            $dataParts = explode('_', $data);
+            if (isset($dataParts[2])) {
+                $currentTimeStump = intval($dataParts[2]);
+            } else {
+                // Xatolik qaytarish
+                $message = 'Xatolik yuz berdi. Iltimos, qayta urunib ko\'ring.';
+                TelegramBotHelper::sendMessage($chatId, $message);
+                return false;
+            }
 
-            $InlineKeyboard = $this->sendCalendar(intval($currentTimeStump));
+            // To'g'ri vaqtni oling
+            $InlineKeyboard = $this->sendCalendar($currentTimeStump);
             TelegramBotHelper::editMessageAndInlineKeyboard($chatId, $messageId, $message, $InlineKeyboard);
-
             return true;
         }
 
+        // Telefon raqamini so'rash
         $message = 'Tel Raqaminggizni yuboring:';
         $messageRu = 'Отправьте свой номер телефона:';
 
@@ -59,14 +70,17 @@ class CalendarCommand
 
     public static function sendCalendar($currentTimestamp = null)
     {
+        // Hozirgi vaqtdan foydalanish
         $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
-        $weekStart = strtotime('last Sunday', $currentTimestamp);
+        // Hozirgi hafta yakshanbasi
+        $weekStart = strtotime('sunday this week', $currentTimestamp);
         $weekDays = [];
 
         for ($i = 0; $i < 7; $i++) {
             $date = date('Y-m-d', strtotime("+$i day", $weekStart));
 
+            // Faqat bugungi kundan keyingi kunlarni qo'shish
             if (strtotime($date) >= $currentTimestamp) {
                 $weekDays[] = [
                     'text' => date('d', strtotime($date)),
@@ -90,6 +104,8 @@ class CalendarCommand
                 'callback_data' => $day['callback_data']
             ];
         }
+
+        // Keyingi hafta tugmasi
         $nextWeekStart = strtotime('next Sunday', $currentTimestamp);
 
         $inlineKeyboard[] = [
