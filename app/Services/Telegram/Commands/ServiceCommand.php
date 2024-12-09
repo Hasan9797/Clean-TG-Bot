@@ -43,38 +43,47 @@ class ServiceCommand
     }
 
 
-    public function sendCalendar()
+    public function sendCalendar($currentDate = null)
     {
-        // Agar sana ko'rsatilmagan bo'lsa, hozirgi sanani olish
-        $currentDate = date('Y-m-d');
+        $currentDate = $currentDate ?: date('Y-m-d');
         $currentTimestamp = strtotime($currentDate);
 
-        // Hafta kunlari va oyning bosh sanasini aniqlash
-        $weekStart = strtotime('last Sunday', $currentTimestamp); // Haftaning boshlanishi
+        $weekStart = strtotime('last Sunday', $currentTimestamp); 
         $weekDays = [];
 
-        for ($i = 0; $i < 7; $i++) { // Haftaning har bir kuni
+        for ($i = 0; $i < 7; $i++) { 
             $date = date('Y-m-d', strtotime("+$i day", $weekStart));
             $weekDays[] = [
-                'text' => date('d', strtotime($date)), // Tugmada faqat kun
-                'callback_data' => "date:$date",      // callback_data uchun to'liq sana
+                'text' => date('d', strtotime($date)), 
+                'callback_data' => "date:$date",      
             ];
         }
 
-        // Oyning nomini olish
         $monthName = date('F Y', $currentTimestamp);
 
-        // Inline keyboard yaratish
-        $keyboard = Keyboard::make()->inline()
-            ->row(
-                Keyboard::inlineButton(['text' => $monthName, 'callback_data' => 'ignore']) // Oyni ko'rsatish (bosilmaydi)
-            )
-            ->row(array_map(fn($day) => Keyboard::inlineButton($day), $weekDays)) // Haftaning kunlari
-            ->row(
-                Keyboard::inlineButton(['text' => '<< Oldingi hafta', 'callback_data' => 'prev_week']),
-                Keyboard::inlineButton(['text' => 'Keyingi hafta >>', 'callback_data' => 'next_week'])
-            );
+        $inlineKeyboard = [
+            [
+                'text' => $monthName,
+                'callback_data' => 'ignore'
+            ]
+        ];
 
-        return $keyboard;
+        foreach ($weekDays as $day) {
+            $inlineKeyboard[] = [
+                'text' => $day['text'],
+                'callback_data' => $day['callback_data']
+            ];
+        }
+
+        $inlineKeyboard[] = [
+            'text' => '<< Oldingi hafta',
+            'callback_data' => 'prev_week'
+        ];
+        $inlineKeyboard[] = [
+            'text' => 'Keyingi hafta >>',
+            'callback_data' => 'next_week'
+        ];
+
+        return $inlineKeyboard;
     }
 }
