@@ -14,12 +14,18 @@ class TelegramLanguageMiddleware
             $chatId = $request->input('message.chat.id')
                 ?? $request->input('callback_query.message.chat.id');
 
+            $message = strval($request->input('message.text')) ?? null;
+
+            if($message == '/start'){
+                return $next($request);
+            }
+
             if (!$chatId) {
                 Log::info('Chat ID not found in request.');
                 return $next($request);
             }
 
-            $language = Cache::get("language_$chatId", 'uz'); // Default to 'uz'
+            $language = Cache::get("language_$chatId", 'lang_uz'); // Default to 'uz'
 
             $request->merge(['language' => $language]);
 
