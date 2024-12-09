@@ -19,6 +19,15 @@ class TelegramBotHelper
 
     public static function sendPhoneRequest($chatId, $message, $replyKeyboard = [])
     {
+        // Xabar matnini tekshirish
+        if (empty($message)) {
+            Telegram::sendMessage([
+                'chat_id' => $chatId,
+                'text' => 'Xabar bo`sh',
+            ]);
+            return false;
+        }
+
         // Parametrlarni massivga yig'ish
         $params = [
             'chat_id' => $chatId,
@@ -32,6 +41,7 @@ class TelegramBotHelper
         // `sendRequest` metodini to'g'ri chaqirish
         Telegram::sendRequest('POST', 'sendMessage', $params); // JSON formatda yuborish
     }
+
 
     public static function editMessageAndInlineKeyboard($chatId, $messageId, $message, $inlineKeyboard = [])
     {

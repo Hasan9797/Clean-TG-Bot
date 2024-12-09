@@ -24,7 +24,7 @@ class CalendarCommand
         $messageId = $request->input('callback_query.message.message_id');
         $data = $request->input('callback_query.data');
 
-        $language = $request->input('language') ?? 'lang_uz';
+        $language = Cache::get("language_$chatId", 'lang_uz');
 
         $InlineKeyboard = [];
         $message = '';
