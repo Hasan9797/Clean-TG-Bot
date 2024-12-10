@@ -25,6 +25,7 @@ class ContactCommand
         if (isset($contact['phone_number'])) {
             $phoneNumber = $contact['phone_number'];
             $firstName = $contact['first_name'];
+            TelegramBotHelper::deleteMessage($chatId, $messageId);
             (new ServicesCommand())->execute($request);
             return true;
         }
