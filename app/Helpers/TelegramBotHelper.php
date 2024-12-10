@@ -69,7 +69,7 @@ class TelegramBotHelper
                 ])
             ];
 
-            Telegram::sendMessage($params);  // Simplified API call
+            Telegram::sendMessage($params);
         } catch (\Throwable $th) {
             self::sendMessage($chatId, $th->getMessage());
         }

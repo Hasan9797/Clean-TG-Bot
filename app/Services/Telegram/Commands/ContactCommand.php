@@ -25,7 +25,7 @@ class ContactCommand
         if (isset($contact['phone_number'])) {
             $phoneNumber = $contact['phone_number'];
             $firstName = $contact['first_name'];
-            (new ServicesCommand())->execute($request);
+            (new ServicesCommand())->getServices($chatId, $messageId);
             return true;
         }
 

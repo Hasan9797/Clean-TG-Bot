@@ -20,12 +20,15 @@ class ServicesCommand
 
     public function execute($request)
     {
-        $chatId = $request->input('message.chat.id')
-            ?? $request->input('callback_query.message.chat.id');
+        $chatId = $request->input('message.chat.id');
 
-        $messageId = $request->input('message.message_id')
-            ?? $request->input('callback_query.message.message_id');
+        $messageId = $request->input('message.message_id');
 
+        $this->getServices($chatId, $messageId);
+    }
+
+    public function getServices($chatId, $messageId)
+    {
         $messageUz = 'Hizmat turlarini tanlang:';
         $messageRu = 'Выберите типы услуг:';
 
