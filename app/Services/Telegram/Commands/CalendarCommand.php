@@ -58,25 +58,21 @@ class CalendarCommand
             $message = $messageRu;
         }
 
-        TelegramBotHelper::deleteMessage($chatId, $messageId);
+        // TelegramBotHelper::deleteMessage($chatId, $messageId);
         TelegramBotHelper::sendMessage($chatId, $message);
     }
 
 
     public static function sendCalendar($currentTimestamp = null)
     {
-        // Hozirgi vaqtdan foydalanish
         $currentTimestamp = $currentTimestamp ?: strtotime(date('Y-m-d'));
 
-        // Hozirgi hafta dushanbasi
-        $weekStart = strtotime('monday this week', $currentTimestamp);  // Haftaning boshlanishini aniqlash
+        $weekStart = strtotime('monday this week', $currentTimestamp);
         $weekDays = [];
 
-        // Haftadagi har bir kunni olish
         for ($i = 0; $i < 7; $i++) {
             $date = date('Y-m-d', strtotime("+$i day", $weekStart));
 
-            // Faqat bugungi kundan keyingi kunlarni qo'shish
             if (strtotime($date) >= $currentTimestamp) {
                 $weekDays[] = [
                     'text' => date('d', strtotime($date)),
@@ -87,7 +83,6 @@ class CalendarCommand
 
         $monthName = date('F Y', $currentTimestamp);
 
-        // Inline keyboard uchun boshlang'ich tugmalar
         $inlineKeyboard = [
             [
                 'text' => $monthName,
@@ -95,7 +90,6 @@ class CalendarCommand
             ]
         ];
 
-        // Haftaning kunlarini inline tugmalarga qo'shish
         foreach ($weekDays as $day) {
             $inlineKeyboard[] = [
                 'text' => $day['text'],
@@ -103,7 +97,6 @@ class CalendarCommand
             ];
         }
 
-        // Keyingi hafta tugmasi (dushanbadan boshlash)
         $nextWeekStart = strtotime('next monday', $currentTimestamp);  // Keyingi hafta dushanbasi
 
         $inlineKeyboard[] = [
@@ -111,7 +104,6 @@ class CalendarCommand
             'callback_data' => "next_week_$nextWeekStart"
         ];
 
-        // Tugmalarni 2 ustunli qilish
         return [
             'inline_keyboard' => array_chunk($inlineKeyboard, 2)
         ];

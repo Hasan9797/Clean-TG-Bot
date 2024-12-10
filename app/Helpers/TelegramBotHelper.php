@@ -37,18 +37,13 @@ class TelegramBotHelper
 
     public static function deleteMessage($chatId, $messageId)
     {
-        $messageExists = Telegram::getMessage([
-            'chat_id' => $chatId,
-            'message_id' => $messageId
-        ]);
-
-        if ($messageExists) {
+        try {
             Telegram::deleteMessage([
                 'chat_id' => $chatId,
-                'message_id' => $messageId
+                'message_id' => $messageId,
             ]);
-        } else {
-            Log::error("Message with ID {$messageId} not found.");
+        } catch (\Throwable $th) {
+            Telegram::sendMessage($chatId, $th->getMessage());
         }
     }
 

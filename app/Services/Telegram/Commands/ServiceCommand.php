@@ -27,8 +27,6 @@ class ServiceCommand
         $messageUz = 'Vaxtni tanlang:';
         $messageRu = 'Выберите время:';
 
-        // Sanalar uchun inline keyboard
-
         $inlineKeyboard = CalendarCommand::sendCalendar();
 
         $message = $messageUz;
@@ -38,7 +36,7 @@ class ServiceCommand
             $message = $messageRu;
         }
 
-        TelegramBotHelper::deleteMessage($chatId, $messageId);
+        // TelegramBotHelper::deleteMessage($chatId, $messageId);
         TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
     }
 
