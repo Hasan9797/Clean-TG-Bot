@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\User\UserService;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class DashboardController extends Controller
 {
     private UserService $userService;
 
@@ -14,18 +14,32 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function index(Request $request)
-    {
-        $users = $this->userService->index($request);
 
-        return view('users.index', [
-            'users' => $users,
-        ]);
+    public function login(Request $request)
+    {
+        return view('login');
     }
 
-    public function create(Request $request)
+    public function loginForm(Request $request)
     {
-        return view('users.create');
+        return redirect('/');
+    }
+
+    public function logout(Request $request)
+    {
+        return redirect('login');
+    }
+
+    public function home(Request $request)
+    {
+        // $users = $this->userService->index($request);
+
+        return view('components.dashboard');
+    }
+
+    public function users(Request $request)
+    {
+        return view('components.users');
     }
 
     public function store(Request $request)

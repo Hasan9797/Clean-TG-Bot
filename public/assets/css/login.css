@@ -1,0 +1,48 @@
+/* login formani markazlashtirish */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ekranning butun balandligi */
+    background-color: #f4f7fc;
+}
+
+.login-form {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Maksimal kenglik */
+}
+
+/* Form elementlariga styling */
+.login-form .form-control {
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.login-form h2 {
+    margin-bottom: 20px;
+}
+
+/* Button styling */
+.login-form .btn {
+    border-radius: 4px;
+    padding: 10px;
+}
+
+/* Remember me styling */
+.login-form .form-check-label {
+    font-size: 14px;
+}
+
+/* Forgot password link */
+.login-form .text-center a {
+    color: #007bff;
+    font-size: 14px;
+}
+
+.login-form .text-center a:hover {
+    text-decoration: underline;
+}
