@@ -36,7 +36,7 @@ class LanguageCommand
             $message = $messageRu;
         }
 
-        // TelegramBotHelper::deleteMessage($chatId, $messageId);
+        TelegramBotHelper::deleteMessage($chatId, $messageId);
         TelegramBotHelper::sendPhoneRequest($chatId, $message);
     }
 }
