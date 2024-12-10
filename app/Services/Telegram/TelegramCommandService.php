@@ -19,25 +19,19 @@ class TelegramCommandService
         CalendarCommand::class,
     ];
 
-    const CONTACT_CLASS = [
-        ContactCommand::class
-    ];
-
     const MESSAGE_CLASS = [
         StartCommand::class,
         ServicesCommand::class,
+        ContactCommand::class
     ];
 
     public function getClass($request)
     {
         $data = $request->input('callback_query.data') ?? false;
-        $contact = $request->input('message.contact');
         $commandsClass = self::MESSAGE_CLASS;
 
         if ($data) {
             $commandsClass = self::CALLBACK_CLASS;
-        } else if ($contact){
-            $commandsClass = self::CONTACT_CLASS;
         }
 
         foreach ($commandsClass as $commandClass) {

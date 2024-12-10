@@ -27,6 +27,6 @@ class LanguageCommand
 
         Cache::put("language_$chatId", $language, 7200); // 2 soatga saqlash.
 
-        (new ServicesCommand())->execute($request, $language);
+        (new ContactCommand())->execute($request, $language);
     }
 }
