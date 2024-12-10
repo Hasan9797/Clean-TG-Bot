@@ -46,7 +46,7 @@ class UserController extends Controller
 
     public function idet(Request $request, $id)
     {
-        $user = $this->userService->findOne($request, $id);
+        $user = $this->userService->findOne($id);
         return view('users.idet', $user);
     }
 

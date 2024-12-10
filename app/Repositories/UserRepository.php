@@ -6,7 +6,7 @@ use App\Models\User;
 
 class UserRepository
 {
-    public function index($limit)
+    public function index($page, $limit)
     {
         return User::paginate($limit);
     }
