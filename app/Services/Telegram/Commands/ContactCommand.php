@@ -22,7 +22,6 @@ class ContactCommand
         $messageId = $request->input('message.message_id');
         $contact = $request->input('message.contact') ?? $request->input('message.text');
 
-        // Contact mavjudligini tekshirish
         if (isset($contact['phone_number'])) {
             $phoneNumber = $contact['phone_number'];
             $firstName = $contact['first_name'];
