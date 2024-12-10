@@ -51,8 +51,8 @@ class CalendarCommand
             return true;
         }
 
-        $message = 'Iltimos, telefon raqamingizni yuboring yoki quyidagi tugma orqali o\'zingizning kontaktni yuboring:';
-        $messageRu = 'Пожалуйста, отправьте свой номер телефона или отправьте контактную информацию, используя кнопку ниже:';
+        $message = 'So\'rovinggiz qabul qilindi tez orada sizga operator aloqaga chiqadi:';
+        $messageRu = 'Ваш запрос принят, оператор свяжется с вами в ближайшее время:';
 
         if (strval($language) === 'lang_ru') {
             $message = $messageRu;
