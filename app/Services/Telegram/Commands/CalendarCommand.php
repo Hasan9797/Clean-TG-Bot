@@ -58,7 +58,7 @@ class CalendarCommand
             $message = $messageRu;
         }
 
-        // TelegramBotHelper::deleteMessage($chatId, $messageId);
+        TelegramBotHelper::deleteMessage($chatId, $messageId);
         TelegramBotHelper::sendMessage($chatId, $message);
     }
 
