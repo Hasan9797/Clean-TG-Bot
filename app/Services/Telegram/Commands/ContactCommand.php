@@ -17,9 +17,9 @@ class ContactCommand
 
     public function execute($request)
     {
-        $chatId = $request->input('callback_query.message.chat.id');
-        $messageId = $request->input('callback_query.message.message_id');
-        $contact = $request->input('callback_query.data.contact');  // User contactni olish
+        $chatId = $request->input('message.chat.id');
+        $messageId = $request->input('message.message_id');
+        $contact = $request->input('message.contact');  // User contactni olish
 
         // Contact mavjudligini tekshirish
         if (isset($contact['phone_number'])) {
