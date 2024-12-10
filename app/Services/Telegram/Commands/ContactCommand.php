@@ -3,8 +3,6 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
-use Illuminate\Support\Facades\Cache;
-
 class ContactCommand
 {
     public static function handel($request)

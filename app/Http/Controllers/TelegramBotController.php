@@ -19,6 +19,9 @@ class TelegramBotController extends Controller
     {
         Log::info('Telegram Request:', $request->all());
         $commandClass = $this->telegramCommandService->getClass($request);
+        if(empty($commandClass)){
+            return false;
+        }
         $commandClass->execute($request);
     }
 }
