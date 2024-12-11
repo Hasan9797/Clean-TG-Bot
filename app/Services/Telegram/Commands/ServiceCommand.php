@@ -39,8 +39,9 @@ class ServiceCommand
         if (strval($language) === 'lang_ru') {
             $message = $messageRu;
         }
+        $service = ServiceEnum::getService(strval($service), $language);
+        CacheService::updateCache("service_$chatId", $service);
 
-        CacheService::updateCache("service_$chatId", ServiceEnum::getService(strval($service), $language));
         TelegramBotHelper::deleteMessage($chatId, $messageId);
         TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
     }
