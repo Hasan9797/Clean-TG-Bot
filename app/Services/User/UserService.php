@@ -22,9 +22,9 @@ class UserService
         return $this->userRepository->index($limit);
     }
 
-    public function store($request)
+    public function store($data)
     {
-        return $this->userRepository->store($request->all());
+        return $this->userRepository->store($data);
     }
 
     public function findOne($id)
