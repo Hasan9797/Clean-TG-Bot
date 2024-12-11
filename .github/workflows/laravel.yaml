@@ -21,4 +21,9 @@ jobs:
 
     - name: Deploy to server
       run: |
-        ssh -o StrictHostKeyChecking=no root@128.199.65.33 "cd /var/www/Clean-TG-Bot && git pull origin main && composer install --no-dev && php artisan migrate --force && php artisan cache:clear && php artisan config:clear && php artisan route:clear"
+        ssh -o StrictHostKeyChecking=no root@128.199.65.33 "
+        cd /var/www/Clean-TG-Bot &&
+        git pull origin main &&
+        composer install --no-dev &&
+        php artisan migrate --force &&
+        php artisan optimize:clear"

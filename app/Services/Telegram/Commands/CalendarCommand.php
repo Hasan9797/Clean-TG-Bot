@@ -5,7 +5,6 @@ namespace App\Services\Telegram\Commands;
 use App\Enums\UserRoleEnum;
 use App\Helpers\TelegramBotHelper;
 use App\Models\User;
-use App\Services\User\UserService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
