@@ -57,6 +57,22 @@ class CalendarCommand
             return true;
         }
 
+        TelegramBotHelper::deleteMessage($chatId, $messageId);
+
+        $userPhone = Cache::get("contact_$chatId", false);
+        $service = Cache::get("service_$chatId", false);
+
+        if (empty($userPhone) || empty($service) || empty($date)) {
+            $messageError = 'Sizda Tel raqami va hizmat turi tanlanmagan, yoke ko\'p vaxt sukut holatida bo\'lgan, iltimos qaytadan raqam va hizmat turini tanlang:';
+            $messageErrorRu = 'Вы не выбрали номер телефона и тип услуги, или большую часть времени он установлен по умолчанию, пожалуйста, выберите номер и тип услуги еще раз:' . $userPhone . ' ' . $service;
+
+            if (strval($language) === 'lang_ru') {
+                $messageError = $messageErrorRu;
+            }
+            TelegramBotHelper::sendMessage($chatId, $messageError);
+            return true;
+        }
+
         $message = 'So\'rovinggiz qabul qilindi tez orada sizga operator aloqaga chiqadi:';
         $messageRu = 'Ваш запрос принят, оператор свяжется с вами в ближайшее время:';
 
@@ -64,37 +80,20 @@ class CalendarCommand
             $message = $messageRu;
         }
 
-        TelegramBotHelper::deleteMessage($chatId, $messageId);
-        $response = TelegramBotHelper::sendMessage($chatId, $message);
+        TelegramBotHelper::sendMessage($chatId, $message);
 
-        if (!empty($response)) {
-            $userPhone = Cache::get("contact_$chatId", false);
-            $service = Cache::get("service_$chatId", false);
+        $firstName = $request->input('callback_query.from.first_name');
+        $userName = $request->input('callback_query.from.username');
 
-            if (empty($userPhone) || empty($service) || empty($date)) {
-                $messageError = 'Sizda Tel raqami va hizmat turi tanlanmagan, yoke ko\'p vaxt sukut holatida bo\'lgan, iltimos qaytadan raqam va hizmat turini tanlang:';
-                $messageErrorRu = 'Вы не выбрали номер телефона и тип услуги, или большую часть времени он установлен по умолчанию, пожалуйста, выберите номер и тип услуги еще раз:';
-
-                if (strval($language) === 'lang_ru') {
-                    $messageError = $messageErrorRu;
-                }
-                TelegramBotHelper::sendMessage($chatId, $messageError);
-                return true;
-            }
-
-            $firstName = $request->input('callback_query.from.first_name');
-            $userName = $request->input('callback_query.from.username');
-
-            $this->userService->store([
-                'telegram_first_name' => $firstName,
-                'telegram_username' =>  $userName,
-                'chat_id' => $chatId,
-                'phone' => $userPhone,
-                'service' => $service,
-                'date' => strval(explode(':', $data)[1]),
-                'role' => UserRoleEnum::USER_CLIENT,
-            ]);
-        }
+        $this->userService->store([
+            'telegram_first_name' => $firstName,
+            'telegram_username' =>  $userName,
+            'chat_id' => $chatId,
+            'phone' => $userPhone,
+            'service' => $service,
+            'date' => strval(explode(':', $data)[1]),
+            'role' => UserRoleEnum::USER_CLIENT,
+        ]);
     }
 
 
