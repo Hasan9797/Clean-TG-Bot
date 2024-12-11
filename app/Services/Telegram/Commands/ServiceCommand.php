@@ -29,7 +29,7 @@ class ServiceCommand
         $language = Cache::get("language_$chatId", 'lang_uz');
 
         $messageUz = 'Vaxtni tanlang:';
-        $messageRu = 'Выберите время:';
+        $messageRu = 'Выберите время:' . $service;
 
         $inlineKeyboard = CalendarCommand::sendCalendar();
 
@@ -42,12 +42,7 @@ class ServiceCommand
 
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
-        $response = TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
-
-        if($response){
-            CacheService::updateCache("service_$chatId", ServiceEnum::getService($service, $language));
-        }
-
+        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
+        CacheService::updateCache("service_$chatId", ServiceEnum::getService(strval($service), $language));
     }
-
 }
