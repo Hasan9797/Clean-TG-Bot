@@ -6,10 +6,10 @@ use Illuminate\Support\Arr;
 
 class ServiceEnum
 {
-    const SERVICE_1 = 'Service_1';
-    const SERVICE_2 = 'Service_2';
-    const SERVICE_3 = 'Service_3';
-    const SERVICE_4 = 'Service_4';
+    const SERVICE_1 = 'service_1';
+    const SERVICE_2 = 'service_2';
+    const SERVICE_3 = 'service_3';
+    const SERVICE_4 = 'service_4';
 
     public static function getServicesRu(): array
     {
@@ -31,9 +31,9 @@ class ServiceEnum
         ];
     }
 
-    public static function getService(string $service, string $lang)
+    public static function getService(string $service, string $lang): string
     {
-        if($lang === 'lang_uz'){
+        if ($lang === 'lang_uz') {
             return Arr::get(self::getServicesUz(), $service, null);
         }
         return  Arr::get(self::getServicesRu(), $service, null);
