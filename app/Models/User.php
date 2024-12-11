@@ -23,6 +23,8 @@ class User extends Authenticatable
         'telegram_username',
         'phone',
         'role',
+        'service',
+        'chat_id',
         'email',
         'password',
     ];
