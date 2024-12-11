@@ -33,6 +33,9 @@ class ServiceEnum
 
     public static function getService(string $service, string $lang)
     {
-        return ($lang == 'lang_uz') ? Arr::get(self::getServicesUz(), $service, null) : Arr::get(self::getServicesRu(), $service, null);
+        if($lang === 'lang_uz'){
+            return Arr::get(self::getServicesUz(), $service, null);
+        }
+        return  Arr::get(self::getServicesRu(), $service, null);
     }
 }
