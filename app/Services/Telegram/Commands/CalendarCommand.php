@@ -85,7 +85,7 @@ class CalendarCommand
         $firstName = $request->input('callback_query.from.first_name');
         $userName = $request->input('callback_query.from.username');
 
-        $this->userService->store([
+        dd([
             'telegram_first_name' => $firstName,
             'telegram_username' =>  $userName,
             'chat_id' => $chatId,
