@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Cache;
 class CalendarCommand
 {
     private UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+    
     public static function handel($request)
     {
         $message = $request->input('callback_query.data');
