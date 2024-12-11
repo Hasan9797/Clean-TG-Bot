@@ -26,7 +26,6 @@ class CalendarCommand
 
     public function execute($request)
     {
-        $callbackQuery = $request->input('callback_query');
         $chatId = $request->input('callback_query.message.chat.id');
         $messageId = $request->input('callback_query.message.message_id');
         $data = $request->input('callback_query.data');
@@ -83,10 +82,13 @@ class CalendarCommand
                 return true;
             }
 
+            $firstName = $request->input('callback_query.from.first_name');
+            $userName = $request->input('callback_query.from.username');
+
             $this->userService->store([
-                'telegram_first_name' => Arr::get($callbackQuery, 'from.first_name'),
-                'telegram_username' => Arr::get($callbackQuery, 'from.username'),
-                'chat_id' => Arr::get($callbackQuery, 'message.chat.id'),
+                'telegram_first_name' => $firstName,
+                'telegram_username' =>  $userName,
+                'chat_id' => $chatId,
                 'phone' => $userPhone,
                 'service' => $service,
                 'date' => strval(explode(':', $data)[1]),

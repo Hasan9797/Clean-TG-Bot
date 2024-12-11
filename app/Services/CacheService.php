@@ -14,6 +14,6 @@ class CacheService
             Cache::delete($key);
         }
 
-        Cache::set($key, $value, 3600);
+        Cache::put($key, $value, 3600);
     }
 }
