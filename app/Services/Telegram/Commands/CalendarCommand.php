@@ -5,20 +5,12 @@ namespace App\Services\Telegram\Commands;
 use App\Enums\UserRoleEnum;
 use App\Helpers\TelegramBotHelper;
 use App\Models\User;
-use App\Services\CacheService;
 use App\Services\User\UserService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
 class CalendarCommand
 {
-    private UserService $userService;
-
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-    
     public static function handel($request)
     {
         $message = $request->input('callback_query.data');
@@ -92,7 +84,7 @@ class CalendarCommand
             $firstName = $request->input('callback_query.from.first_name');
             $userName = $request->input('callback_query.from.username');
 
-            $this->userService->store([
+            User::create([
                 'telegram_first_name' => $firstName,
                 'telegram_username' =>  $userName,
                 'chat_id' => $chatId,
