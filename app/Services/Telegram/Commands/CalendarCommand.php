@@ -9,6 +9,7 @@ use App\Services\CacheService;
 use App\Services\User\UserService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class CalendarCommand
 {
@@ -85,7 +86,7 @@ class CalendarCommand
         $firstName = $request->input('callback_query.from.first_name');
         $userName = $request->input('callback_query.from.username');
 
-        dd([
+        Log::info([
             'telegram_first_name' => $firstName,
             'telegram_username' =>  $userName,
             'chat_id' => $chatId,
