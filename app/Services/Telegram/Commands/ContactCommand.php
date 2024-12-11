@@ -3,6 +3,8 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
+use App\Services\CacheService;
+use Illuminate\Support\Facades\Cache;
 
 class ContactCommand
 {
@@ -24,8 +26,13 @@ class ContactCommand
 
         if (isset($contact['phone_number'])) {
             $phoneNumber = $contact['phone_number'];
-            $firstName = $contact['first_name'];
-            (new ServicesCommand())->getServices($chatId, $messageId);
+
+            $response = (new ServicesCommand())->getServices($chatId, $messageId);
+
+            if(!empty($response)){
+                CacheService::updateCache("contact_$chatId", $phoneNumber);
+            }
+
             return true;
         }
 

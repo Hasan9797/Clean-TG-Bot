@@ -10,11 +10,12 @@ class TelegramBotHelper
 
     public static function inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard = [])
     {
-        Telegram::sendMessage([
+        $response = Telegram::sendMessage([
             'chat_id' => $chatId,
             'text' => $message,
             'reply_markup' => json_encode($inlineKeyboard)
         ]);
+        return $response;
     }
 
     public static function editMessageAndInlineKeyboard($chatId, $messageId, $message, $inlineKeyboard = [])
@@ -29,7 +30,7 @@ class TelegramBotHelper
 
     public static function sendMessage($chatId, $message)
     {
-        Telegram::sendMessage([
+        return Telegram::sendMessage([
             'chat_id' => $chatId,
             'text' => $message,
         ]);

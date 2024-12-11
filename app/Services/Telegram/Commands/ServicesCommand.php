@@ -69,6 +69,7 @@ class ServicesCommand
         }
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
+        $response = TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
+        return $response;
     }
 }

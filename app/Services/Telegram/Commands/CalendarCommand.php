@@ -2,11 +2,17 @@
 
 namespace App\Services\Telegram\Commands;
 
+use App\Enums\UserRoleEnum;
 use App\Helpers\TelegramBotHelper;
+use App\Models\User;
+use App\Services\CacheService;
+use App\Services\User\UserService;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
 class CalendarCommand
 {
+    private UserService $userService;
     public static function handel($request)
     {
         $message = $request->input('callback_query.data');
@@ -20,6 +26,7 @@ class CalendarCommand
 
     public function execute($request)
     {
+        $callbackQuery = $request->input('callback_query');
         $chatId = $request->input('callback_query.message.chat.id');
         $messageId = $request->input('callback_query.message.message_id');
         $data = $request->input('callback_query.data');
@@ -59,7 +66,33 @@ class CalendarCommand
         }
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::sendMessage($chatId, $message);
+        $response = TelegramBotHelper::sendMessage($chatId, $message);
+
+        if (!empty($response)) {
+            $userPhone = Cache::get("contact_$chatId", false);
+            $service = Cache::get("service_$chatId", false);
+
+            if (empty($userPhone) || empty($service) || empty($date)) {
+                $messageError = 'Sizda Tel raqami va hizmat turi tanlanmagan, yoke ko\'p vaxt sukut holatida bo\'lgan, iltimos qaytadan raqam va hizmat turini tanlang:';
+                $messageErrorRu = 'Вы не выбрали номер телефона и тип услуги, или большую часть времени он установлен по умолчанию, пожалуйста, выберите номер и тип услуги еще раз:';
+
+                if (strval($language) === 'lang_ru') {
+                    $messageError = $messageErrorRu;
+                }
+                TelegramBotHelper::sendMessage($chatId, $messageError);
+                return true;
+            }
+
+            $this->userService->store([
+                'telegram_first_name' => Arr::get($callbackQuery, 'from.first_name'),
+                'telegram_username' => Arr::get($callbackQuery, 'from.username'),
+                'chat_id' => Arr::get($callbackQuery, 'message.chat.id'),
+                'phone' => $userPhone,
+                'service' => $service,
+                'date' => strval(explode(':', $data)[1]),
+                'role' => UserRoleEnum::USER_CLIENT,
+            ]);
+        }
     }
 
 

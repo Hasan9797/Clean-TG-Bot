@@ -16,10 +16,10 @@ class UserService
 
     public function index($request)
     {
-        $page = $request->get('page');
-        $limit = $request->get('limit');
+        $page = $request->get('page') ?? 1;
+        $limit = $request->get('limit') ?? 20;
 
-        return $this->userRepository->index($page, $limit);
+        return $this->userRepository->index($limit);
     }
 
     public function store($request)
