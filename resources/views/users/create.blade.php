@@ -3,8 +3,6 @@
         Create User
         </x-slot>
 
-        <!-- <link rel="stylesheet" href="/public/assets/css/create-form.css"> -->
-
         <div class="container mt-5">
             <div class="row justify-content-center">
                 <div class="col-md-8">
