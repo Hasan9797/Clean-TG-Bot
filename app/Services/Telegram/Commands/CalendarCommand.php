@@ -60,15 +60,24 @@ class CalendarCommand
             $userPhone = Cache::get("contact_$chatId", false);
             $service = Cache::get("service_$chatId", false);
 
-            if (empty($userPhone) || empty($service) || empty($data)) {
-                $messageError = 'Sizda Tel raqami va hizmat turi tanlanmagan, yoke ko\'p vaxt sukut holatida bo\'lgan, iltimos qaytadan raqam va hizmat turini tanlang:';
-                $messageErrorRu = 'Вы не выбрали номер телефона и тип услуги, или большую часть времени он установлен по умолчанию, пожалуйста, выберите номер и тип услуги еще раз:' . $userPhone . ' ' . $service;
+            if (!$userPhone || !$service) {
+                $messageError = "Telefon raqami yoki xizmat turi aniqlanmadi.\nIltimos qaytadan raqam va hizmat turini tanlang:";
+                $messageErrorRu = "Номер телефона или тип услуги не обнаружен.\nПожалуйста, выберите номер и тип услуги еще раз:";
 
                 if (strval($language) === 'lang_ru') {
                     $messageError = $messageErrorRu;
                 }
                 TelegramBotHelper::sendMessage($chatId, $messageError);
                 return true;
+            }
+
+
+            $firstName = $request->input('callback_query.from.first_name');
+            $userName = $request->input('callback_query.from.username');
+
+            if (!$chatId || !$messageId || !$data || !$firstName || !$userName) {
+                TelegramBotHelper::sendMessage($chatId, "Telegram ma'lumotlari to'liq emas.");
+                return false;
             }
 
             $message = 'So\'rovinggiz qabul qilindi tez orada sizga operator aloqaga chiqadi:';
@@ -78,14 +87,7 @@ class CalendarCommand
                 $message = $messageRu;
             }
 
-            $respone = TelegramBotHelper::sendMessage($chatId, $message);
-
-            if ($respone === false) {
-                return false;
-            }
-
-            $firstName = $request->input('callback_query.from.first_name');
-            $userName = $request->input('callback_query.from.username');
+            TelegramBotHelper::sendMessage($chatId, $message);
 
             User::create([
                 'telegram_first_name' => $firstName,
