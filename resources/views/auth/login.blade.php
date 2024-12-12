@@ -21,8 +21,8 @@
                 @csrf
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required
-                        placeholder="Enter your email">
+                    <input type="text" class="form-control" id="email" name="email" required
+                        placeholder="Enter your login:">
                 </div>
 
                 <div class="form-group">
