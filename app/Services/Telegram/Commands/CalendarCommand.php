@@ -14,7 +14,7 @@ class CalendarCommand
     {
         $message = $request->input('callback_query.data');
 
-        if (preg_match('#date:|next_week_#', $message)) {
+        if (preg_match('#date_|next_week_#', $message)) {
             return true;
         }
         return false;
@@ -74,11 +74,7 @@ class CalendarCommand
 
             $firstName = $request->input('callback_query.from.first_name');
             $userName = $request->input('callback_query.from.username');
-
-            if (!$chatId || !$messageId || !$data || !$firstName || !$userName) {
-                TelegramBotHelper::sendMessage($chatId, "Telegram ma'lumotlari to'liq emas.");
-                return false;
-            }
+            $date = strval(explode('_', $data)[1]);
 
             $message = 'So\'rovinggiz qabul qilindi tez orada sizga operator aloqaga chiqadi:';
             $messageRu = 'Ваш запрос принят, оператор свяжется с вами в ближайшее время:';
@@ -95,7 +91,7 @@ class CalendarCommand
                 'chat_id' => $chatId,
                 'phone' => $userPhone,
                 'service' => $service,
-                'date' => $data,
+                'date' => $ $date,
                 'role' => UserRoleEnum::USER_CLIENT,
             ]);
         } catch (\Throwable $th) {
@@ -117,7 +113,7 @@ class CalendarCommand
             if (strtotime($date) >= $currentTimestamp) {
                 $weekDays[] = [
                     'text' => date('d', strtotime($date)),
-                    'callback_data' => "$date",
+                    'callback_data' => "date_$date",
                 ];
             }
         }
