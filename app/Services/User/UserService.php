@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Models\User;
 use App\Repositories\UserRepository;
 
 class UserService
@@ -12,7 +13,6 @@ class UserService
     {
         $this->userRepository = $userRepository;
     }
-
 
     public function index($request)
     {
@@ -48,4 +48,9 @@ class UserService
         return $this->userRepository->clientsCount();
     }
 
+    public function clientCreateAndUpdate($chatId, $change)
+    {
+        User::find('chat_id', $chatId)->update($change);
+        return true;
+    }
 }
