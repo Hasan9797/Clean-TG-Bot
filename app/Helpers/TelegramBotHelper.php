@@ -82,28 +82,35 @@ class TelegramBotHelper
 
 
     public static function sendClientRequestMessage($chatId, $user, $language)
-{
-    $messageTemplate = $language === 'lang_ru'
-        ? "📝 *Новый клиент запросил:*\n"
-        : "📝 *Yangi mijoz so'rovi:*\n";
+    {
+        // Maxsus belgilarni qochirish uchun funksiya
+        $escapeMarkdown = function ($text) {
+            $search = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+            $replace = array_map(fn($char) => '\\' . $char, $search);
+            return str_replace($search, $replace, $text);
+        };
 
-    $messageTemplate .= "👤 *" . ($language === 'lang_ru' ? 'Имя клиента' : 'Foydalanuvchi') . ":* $user->telegram_first_name\n";
-    $messageTemplate .= "📛 *" . ($language === 'lang_ru' ? 'Имя пользователя' : 'Username') . ":* @$user->telegram_username\n";
-    $messageTemplate .= "📱 *" . ($language === 'lang_ru' ? 'Номер телефона' : 'Telefon') . ":* $user->phone\n";
-    $messageTemplate .= "🛠️ *" . ($language === 'lang_ru' ? 'Услуга' : 'Xizmat turi') . ":* $user->service\n";
-    $messageTemplate .= "📅 *" . ($language === 'lang_ru' ? 'Дата' : 'Sana') . ":* $user->date\n";
+        // Xabarni formatlash
+        $messageTemplate = $language === 'lang_ru'
+            ? "📝 *Новый клиент запросил:*\n"
+            : "📝 *Yangi mijoz so'rovi:*\n";
 
-    // Telegramga xabar yuborish
-    try {
-        Telegram::sendMessage([
-            'chat_id' => $chatId,
-            'text' => $messageTemplate,
-            'parse_mode' => 'Markdown',
-        ]);
-    } catch (\Throwable $e) {
-        self::sendMessage(6900325674, $e->getMessage());
-        Log::error("Telegram xabar yuborishda xatolik: " . $e->getMessage());
+        $messageTemplate .= "👤 *" . ($language === 'lang_ru' ? 'Имя клиента' : 'Foydalanuvchi') . ":* " . $escapeMarkdown($user->telegram_first_name) . "\n";
+        $messageTemplate .= "📛 *" . ($language === 'lang_ru' ? 'Имя пользователя' : 'Username') . ":* @" . $escapeMarkdown($user->telegram_username) . "\n";
+        $messageTemplate .= "📱 *" . ($language === 'lang_ru' ? 'Номер телефона' : 'Telefon') . ":* " . $escapeMarkdown($user->phone) . "\n";
+        $messageTemplate .= "🛠️ *" . ($language === 'lang_ru' ? 'Услуга' : 'Xizmat turi') . ":* " . $escapeMarkdown($user->service) . "\n";
+        $messageTemplate .= "📅 *" . ($language === 'lang_ru' ? 'Дата' : 'Sana') . ":* " . $escapeMarkdown($user->date) . "\n";
+
+        // Telegramga xabar yuborish
+        try {
+            Telegram::sendMessage([
+                'chat_id' => $chatId,
+                'text' => $messageTemplate,
+                'parse_mode' => 'MarkdownV2',
+            ]);
+        } catch (\Throwable $e) {
+            self::sendMessage(6900325674, $e->getMessage());
+            Log::error("Telegram xabar yuborishda xatolik: " . $e->getMessage());
+        }
     }
-}
-
 }
