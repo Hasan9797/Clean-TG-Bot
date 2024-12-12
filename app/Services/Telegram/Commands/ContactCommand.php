@@ -6,6 +6,7 @@ use App\Helpers\PhoneAndDateHelper;
 use App\Helpers\TelegramBotHelper;
 use App\Services\CacheService;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class ContactCommand
@@ -25,12 +26,18 @@ class ContactCommand
 
         try {
             $chatId = $request->input('message.chat.id');
-            $messageId = $request->input('message.message_id');
             $phoneNumber = Arr::get($request->input('message.contact'), 'phone_number', $request->input('message.text'));
+            $message = 'Manzilinggizni yuborish uchun quyidagi tugmani bosing:';
+
+            $cachLanguage = Cache::get("language_$chatId", 'lang_uz');
+
+            if ($cachLanguage == 'lang_ru') {
+                $message = 'Нажмите кнопку ниже, чтобы отправить Manzilinglife:';
+            }
 
             if (PhoneAndDateHelper::isValidPhoneNumber($phoneNumber)) {
 
-                $response = (new ServicesCommand())->getServices($chatId, $messageId);
+                TelegramBotHelper::sendLocationRequest($chatId, $message);
 
                 if (!empty($response)) {
                     CacheService::updateCache("contact_$chatId", $phoneNumber);

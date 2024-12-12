@@ -28,16 +28,12 @@ class ServiceCommand
 
         $language = Cache::get("language_$chatId", 'lang_uz');
 
-        $messageUz = 'Vaxtni tanlang:_'. ServiceEnum::getService(strval($service), $language);
-        $messageRu = 'Выберите время:';
+        $message = 'Vaxtni tanlang:';
 
         $inlineKeyboard = CalendarCommand::sendCalendar();
 
-        $message = $messageUz;
-
-
         if (strval($language) === 'lang_ru') {
-            $message = $messageRu;
+            $message = 'Выберите время:';
         }
         $service = ServiceEnum::getService(strval($service), $language);
         CacheService::updateCache("service_$chatId", $service);

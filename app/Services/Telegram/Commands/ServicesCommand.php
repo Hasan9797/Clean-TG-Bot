@@ -29,9 +29,6 @@ class ServicesCommand
 
     public function getServices($chatId, $messageId)
     {
-        $messageUz = 'Hizmat turlarini tanlang:';
-        $messageRu = 'Выберите типы услуг:';
-
         $inlineKeyboardRu = [
             'inline_keyboard' => [
                 [
@@ -58,13 +55,13 @@ class ServicesCommand
             ],
         ];
 
+        $message = 'Hizmat turlarini tanlang:';
         $cachLanguage = Cache::get("language_$chatId", 'lang_uz');
 
-        $message = $messageUz;
         $inlineKeyboard = $inlineKeyboardUz;
 
         if (strval($cachLanguage) === 'lang_ru') {
-            $message = $messageRu;
+            $message = 'Выберите типы услуг:';
             $inlineKeyboard = $inlineKeyboardRu;
         }
 

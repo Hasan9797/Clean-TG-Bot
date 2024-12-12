@@ -5,6 +5,7 @@ namespace App\Services\Telegram;
 use App\Services\Telegram\Commands\CalendarCommand;
 use App\Services\Telegram\Commands\ContactCommand;
 use App\Services\Telegram\Commands\LanguageCommand;
+use App\Services\Telegram\Commands\LocationCommand;
 use App\Services\Telegram\Commands\ServiceCommand;
 use App\Services\Telegram\Commands\ServicesCommand;
 use App\Services\Telegram\Commands\StartCommand;
@@ -23,7 +24,8 @@ class TelegramCommandService
     const MESSAGE_CLASS = [
         StartCommand::class,
         ServicesCommand::class,
-        ContactCommand::class
+        ContactCommand::class,
+        LocationCommand::class
     ];
 
     public function getClass($request)

@@ -113,4 +113,36 @@ class TelegramBotHelper
             Log::error("Telegram xabar yuborishda xatolik: " . $e->getMessage());
         }
     }
+
+    public static function sendLocationRequest($chatId, $message = null)
+    {
+        try {
+            if (empty(trim($message))) {
+                $message = "Iltimos, joylashuvingizni yuboring.";
+            }
+
+            $replyKeyboard = [
+                [
+                    [
+                        'text' => 'Joylashuvni yuborish',
+                        'request_location' => true
+                    ]
+                ]
+            ];
+
+            $params = [
+                'chat_id' => $chatId,
+                'text' => $message,
+                'reply_markup' => json_encode([
+                    'keyboard' => $replyKeyboard,
+                    'resize_keyboard' => true,
+                    'one_time_keyboard' => true,
+                ])
+            ];
+
+            Telegram::sendMessage($params);
+        } catch (\Throwable $th) {
+            Log::error("Telegram joylashuv so'rovida xatolik: " . $th->getMessage());
+        }
+    }
 }

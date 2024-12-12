@@ -30,10 +30,9 @@ class LanguageCommand
         Cache::put("language_$chatId", $language, 7200);
 
         $message = 'Iltimos, telefon raqamingizni yozib jo\'nating yoki quyidagi tugma orqali o\'zingizning raqaminggizni yuboring:';
-        $messageRu = 'Пожалуйста, отправьте свой номер телефона или отправьте контактную, используя кнопку ниже:';
 
         if (strval($language) === 'lang_ru') {
-            $message = $messageRu;
+            $message = 'Пожалуйста, отправьте свой номер телефона или отправьте контактную, используя кнопку ниже:';;
         }
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
