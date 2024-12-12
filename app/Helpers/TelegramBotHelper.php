@@ -79,4 +79,31 @@ class TelegramBotHelper
             self::sendMessage($chatId, $th->getMessage());
         }
     }
+
+
+    public static function sendClientRequestMessage($chatId, $user, $language)
+{
+    $messageTemplate = $language === 'lang_ru'
+        ? "📝 *Новый клиент запросил:*\n"
+        : "📝 *Yangi mijoz so'rovi:*\n";
+
+    $messageTemplate .= "👤 *" . ($language === 'lang_ru' ? 'Имя клиента' : 'Foydalanuvchi') . ":* $user->firstName\n";
+    $messageTemplate .= "📛 *" . ($language === 'lang_ru' ? 'Имя пользователя' : 'Username') . ":* @$user->userName\n";
+    $messageTemplate .= "📱 *" . ($language === 'lang_ru' ? 'Номер телефона' : 'Telefon') . ":* $user->userPhone\n";
+    $messageTemplate .= "🛠️ *" . ($language === 'lang_ru' ? 'Услуга' : 'Xizmat turi') . ":* $user->service\n";
+    $messageTemplate .= "📅 *" . ($language === 'lang_ru' ? 'Дата' : 'Sana') . ":* $user->date\n";
+
+    // Telegramga xabar yuborish
+    try {
+        Telegram::sendMessage([
+            'chat_id' => $chatId,
+            'text' => $messageTemplate,
+            'parse_mode' => 'Markdown',
+        ]);
+    } catch (\Throwable $e) {
+        self::sendMessage(6900325674, $e->getMessage());
+        Log::error("Telegram xabar yuborishda xatolik: " . $e->getMessage());
+    }
+}
+
 }

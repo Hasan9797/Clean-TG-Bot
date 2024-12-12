@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Cache;
 
 class CalendarCommand
 {
+    const GROUP_CHAT_ID = -4711715104;
+
     public static function handel($request)
     {
         $message = $request->input('callback_query.data');
@@ -85,7 +87,7 @@ class CalendarCommand
 
             TelegramBotHelper::sendMessage($chatId, $message);
 
-            User::create([
+            $user = User::create([
                 'telegram_first_name' => $firstName,
                 'telegram_username' =>  $userName,
                 'chat_id' => $chatId,
@@ -94,6 +96,8 @@ class CalendarCommand
                 'date' => $data,
                 'role' => UserRoleEnum::USER_CLIENT,
             ]);
+
+            TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, $user, $language);
         } catch (\Throwable $th) {
             TelegramBotHelper::sendMessage($chatId, $th->getMessage());
         }
