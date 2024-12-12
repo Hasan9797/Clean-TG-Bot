@@ -41,10 +41,10 @@ return [
             'provider' => 'users',
         ],
 
-        'api' => [
-            'driver' => 'sanctum',
-            'provider' => 'users',
-        ],
+        // 'api' => [
+        //     'driver' => 'sanctum',
+        //     'provider' => 'users',
+        // ],
     ],
 
     /*
@@ -104,6 +104,7 @@ return [
         ],
     ],
 
+    'redirect_to' => '/login',
     /*
     |--------------------------------------------------------------------------
     | Password Confirmation Timeout

@@ -17,7 +17,7 @@
             <h2 class="text-center">Login</h2>
 
             <!-- Login formasi -->
-            <form method="POST" action="{{ route('login-form') }}">
+            <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="form-group">
                     <label for="email">Email</label>
