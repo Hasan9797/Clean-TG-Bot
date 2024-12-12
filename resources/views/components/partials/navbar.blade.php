@@ -32,7 +32,7 @@
 
              <li>
                  <a href="{{ route('users') }}" class="{{ request()->is('users') ? 'active-menu' : '' }}">
-                     <i class="fa fa-table fa-3x"></i> Users
+                     <i class="fa fa-table fa-3x"></i> Admin
                  </a>
              </li>
 

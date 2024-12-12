@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $users = $this->userService->index($request);
+        $users = $this->userService->admins($request);
 
         return view('users.index', [
             'users' => $users,

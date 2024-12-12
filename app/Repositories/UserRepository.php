@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\UserRoleEnum;
 use App\Models\User;
 
 class UserRepository
@@ -9,6 +10,11 @@ class UserRepository
     public function index($limit)
     {
         return User::paginate($limit);
+    }
+
+    public function admin($limit = 15)
+    {
+        return User::where('role', UserRoleEnum::USER_ADMIN)->paginate($limit);
     }
 
     public function store($data)

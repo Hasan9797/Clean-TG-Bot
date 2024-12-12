@@ -22,6 +22,13 @@ class UserService
         return $this->userRepository->index($limit);
     }
 
+    public function admins($request)
+    {
+        $limit = $request->get('limit') ?? 20;
+
+        return $this->userRepository->admin($limit);
+    }
+
     public function store($data)
     {
         return $this->userRepository->store($data);

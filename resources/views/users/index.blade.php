@@ -32,25 +32,26 @@
                                             id="dataTables-example">
                                             <thead>
                                                 <tr>
-                                                    <th>name</th>
-                                                    <th>Browser</th>
-                                                    <th>Platform(s)</th>
-                                                    <th>Engine version</th>
-                                                    <th>CSS grade</th>
+                                                    <th>Имя</th>
+                                                    <th>Телефон</th>
+                                                    <th>Создано</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @foreach($users as $user)
                                                 <tr class="odd gradeX">
-                                                    <td>Trident</td>
-                                                    <td>Internet Explorer 4.0</td>
-                                                    <td>Win 95+</td>
-                                                    <td class="center">4</td>
-                                                    <td class="center">X</td>
+                                                    <td>{{ $user->name }}</td>
+                                                    <td>{{ $user->phone }}</td>
+                                                    <td>{{ $user->created_at }}</td>
                                                 </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
-
+                                    <!-- Pagination Links -->
+                                    <div class="pagination">
+                                        {{ $users->links() }}
+                                    </div>
                                 </div>
                             </div>
                             <!--End Advanced Tables -->

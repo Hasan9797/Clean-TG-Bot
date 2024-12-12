@@ -78,7 +78,6 @@
                                                 <th>Чат ID</th>
                                                 <th>Телефон</th>
                                                 <th>Услуга</th>
-                                                <th>Роль</th>
                                                 <th>Дата</th>
                                                 <th>Создано</th>
                                             </tr>
@@ -91,7 +90,6 @@
                                                 <td>{{ $user->chat_id }}</td>
                                                 <td>{{ $user->phone }}</td>
                                                 <td>{{ $user->service }}</td>
-                                                <td>{{ $user->role }}</td>
                                                 <td>{{ $user->date }}</td>
                                                 <td>{{ $user->created_at }}</td>
                                             </tr>
