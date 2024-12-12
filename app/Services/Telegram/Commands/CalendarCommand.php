@@ -75,7 +75,6 @@ class CalendarCommand
 
             $firstName = $request->input('callback_query.from.first_name');
             $userName = $request->input('callback_query.from.username');
-            $date = strval(Arr::get(explode('_', $data), 1));
 
             $message = 'So\'rovinggiz qabul qilindi tez orada sizga operator aloqaga chiqadi:';
             $messageRu = 'Ваш запрос принят, оператор свяжется с вами в ближайшее время:';
@@ -92,7 +91,7 @@ class CalendarCommand
                 'chat_id' => $chatId,
                 'phone' => $userPhone,
                 'service' => $service,
-                'date' => $date,
+                'date' => $data,
                 'role' => UserRoleEnum::USER_CLIENT,
             ]);
         } catch (\Throwable $th) {
