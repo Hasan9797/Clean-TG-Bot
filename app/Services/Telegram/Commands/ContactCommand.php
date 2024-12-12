@@ -2,7 +2,7 @@
 
 namespace App\Services\Telegram\Commands;
 
-use App\Helpers\PhoneHelper;
+use App\Helpers\PhoneAndDateHelper;
 use App\Helpers\TelegramBotHelper;
 use App\Services\CacheService;
 use Illuminate\Support\Arr;
@@ -28,7 +28,7 @@ class ContactCommand
             $messageId = $request->input('message.message_id');
             $phoneNumber = Arr::get($request->input('message.contact'), 'phone_number', $request->input('message.text'));
 
-            if (PhoneHelper::isValidPhoneNumber($phoneNumber)) {
+            if (PhoneAndDateHelper::isValidPhoneNumber($phoneNumber)) {
 
                 $response = (new ServicesCommand())->getServices($chatId, $messageId);
 

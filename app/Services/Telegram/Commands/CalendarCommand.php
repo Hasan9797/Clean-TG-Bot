@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Enums\UserRoleEnum;
+use App\Helpers\PhoneAndDateHelper;
 use App\Helpers\TelegramBotHelper;
 use App\Models\User;
 use Illuminate\Support\Arr;
@@ -14,7 +15,7 @@ class CalendarCommand
     {
         $message = $request->input('callback_query.data');
 
-        if (preg_match('#date_|next_week_#', $message)) {
+        if (preg_match('#next_week_#', $message) || PhoneAndDateHelper::isValidDate($message)) {
             return true;
         }
         return false;
@@ -91,7 +92,7 @@ class CalendarCommand
                 'chat_id' => $chatId,
                 'phone' => $userPhone,
                 'service' => $service,
-                'date' => $ $date,
+                'date' => $date,
                 'role' => UserRoleEnum::USER_CLIENT,
             ]);
         } catch (\Throwable $th) {
@@ -113,7 +114,7 @@ class CalendarCommand
             if (strtotime($date) >= $currentTimestamp) {
                 $weekDays[] = [
                     'text' => date('d', strtotime($date)),
-                    'callback_data' => "date_$date",
+                    'callback_data' => "$date",
                 ];
             }
         }
