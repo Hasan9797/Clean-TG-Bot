@@ -17,9 +17,11 @@
     <link href="assets/css/create-form.css" rel="stylesheet" />
     <!-- FONTAWESOME STYLES-->
     <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- GOOGLE FONTS-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-    <meta charset="utf-8" />
+    <!-- TABLE STYLES-->
+    <link href="assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -44,6 +46,8 @@
     <script src="assets/js/bootstrap.min.js"></script>
     <!-- DATA TABLE SCRIPTS -->
     <script src="assets/js/dataTables/jquery.dataTables.js"></script>
+
+    <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
 
     <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
 

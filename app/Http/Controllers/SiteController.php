@@ -17,7 +17,9 @@ class SiteController extends Controller
 
     public function index(Request $request)
     {
-        $users = User::paginate(20);
-        return view('components.site.index', ['users' => $users]);
+        $users = $this->userService->index($request);
+        $admin = $this->userService->admins($request);
+        $count = $this->userService->clientCount();
+        return view('components.site.index', ['users' => $users, 'count' => $count, 'admin' => $admin]);
     }
 }

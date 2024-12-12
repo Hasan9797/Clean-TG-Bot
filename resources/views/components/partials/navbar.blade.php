@@ -26,13 +26,13 @@
 
              <li>
                  <a href="{{ route('home') }}" class="{{ request()->is('/') ? 'active-menu' : '' }}">
-                     <i class="fa fa-dashboard fa-3x"></i> Dashboard
+                     <i class="fa fa-dashboard fa-3x"></i> Главная
                  </a>
              </li>
 
              <li>
                  <a href="{{ route('users') }}" class="{{ request()->is('users') ? 'active-menu' : '' }}">
-                     <i class="fa fa-table fa-3x"></i> Admin
+                     <i class="fa fa-table fa-3x"></i> Админ
                  </a>
              </li>
 

@@ -9,7 +9,7 @@ class UserRepository
 {
     public function index($limit)
     {
-        return User::paginate($limit);
+        return User::where('role', UserRoleEnum::USER_CLIENT)->paginate($limit);
     }
 
     public function admin($limit = 15)
@@ -32,8 +32,8 @@ class UserRepository
         return User::where('id', $id)->update($data);
     }
 
-    public function delete($data)
+    public function clientsCount()
     {
-        return User::destroy($data);
+        return User::where('role', UserRoleEnum::USER_CLIENT)->count();
     }
 }

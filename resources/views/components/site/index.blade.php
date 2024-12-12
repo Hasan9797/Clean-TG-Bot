@@ -7,8 +7,8 @@
             <div id="page-inner">
                 <div class="row">
                     <div class="col-md-12">
-                        <h2>Admin Dashboard</h2>
-                        <h5>Welcome Jhon Deo , Love to see you back. </h5>
+                        <h2>Статистика</h2>
+                        <h5>Все заказы:</h5>
                     </div>
                 </div>
                 <!-- /. ROW  -->
@@ -20,7 +20,8 @@
                                 <i class="fa fa-envelope-o"></i>
                             </span>
                             <div class="text-box">
-                                <p class="main-text">120 New</p>
+                                <p class="main-text">{{ $count }}
+                                    New</p>
                                 <p class="text-muted">Messages</p>
                             </div>
                         </div>
@@ -31,8 +32,9 @@
                                 <i class="fa fa-bars"></i>
                             </span>
                             <div class="text-box">
-                                <p class="main-text">30 Tasks</p>
-                                <p class="text-muted">Remaining</p>
+                                <p class="main-text">{{ $count }}
+                                    Клиенты</p>
+                                <p class="text-muted">Clients</p>
                             </div>
                         </div>
                     </div>
@@ -42,7 +44,8 @@
                                 <i class="fa fa-bell-o"></i>
                             </span>
                             <div class="text-box">
-                                <p class="main-text">240 New</p>
+                                <p class="main-text">{{ $count }}
+                                    New</p>
                                 <p class="text-muted">Notifications</p>
                             </div>
                         </div>
@@ -53,8 +56,9 @@
                                 <i class="fa fa-rocket"></i>
                             </span>
                             <div class="text-box">
-                                <p class="main-text">3 Orders</p>
-                                <p class="text-muted">Pending</p>
+                                <p class="main-text">{{ count($admin) }}
+                                    Админ</p>
+                                <p class="text-muted">Admin</p>
                             </div>
                         </div>
                     </div>

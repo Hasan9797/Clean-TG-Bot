@@ -16,8 +16,7 @@ class UserService
 
     public function index($request)
     {
-        $page = $request->get('page') ?? 1;
-        $limit = $request->get('limit') ?? 20;
+        $limit = $request->get('limit') ?? 10;
 
         return $this->userRepository->index($limit);
     }
@@ -44,9 +43,9 @@ class UserService
         return $this->userRepository->update($data, $id);
     }
 
-    public function delete($data)
+    public function clientCount()
     {
-        //
+        return $this->userRepository->clientsCount();
     }
 
 }
