@@ -29,9 +29,9 @@ class TelegramCommandService
     public function getClass($request)
     {
         $data = $request->input('callback_query.data') ?? false;
-        $chatId = $request->input('message.chat_id') ?? $request->input('callback_query.message.chat_id');
+        $chatType = $request->input('message.chat.type');
 
-        if($chatId == self::GROUP_CHAT_ID){
+        if ($chatType === 'group' || $chatType === 'supergroup') {
             return false;
         }
 
