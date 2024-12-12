@@ -78,8 +78,8 @@ class CalendarCommand
             $firstName = $request->input('callback_query.from.first_name');
             $userName = $request->input('callback_query.from.username');
 
-            $message = 'So\'rovinggiz qabul qilindi tez orada sizga operator aloqaga chiqadi:';
-            $messageRu = 'Ваш запрос принят, оператор свяжется с вами в ближайшее время:';
+            $message = 'Rahmat Sizning so\'rovingiz qabul qilindi, operator tez orada siz bilan bog\'lanadi:';
+            $messageRu = 'Спасибо Ваш запрос принят, оператор свяжется с вами в ближайшее время:';
 
             if (strval($language) === 'lang_ru') {
                 $message = $messageRu;

@@ -58,7 +58,7 @@ class TelegramBotHelper
             $replyKeyboard = [
                 [
                     [
-                        'text' => 'Kontaktni yuborish',
+                        'text' => 'Отправить контакт',
                         'request_contact' => true
                     ]
                 ]
