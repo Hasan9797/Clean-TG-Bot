@@ -74,7 +74,7 @@ class CalendarCommand
 
             $firstName = $request->input('callback_query.from.first_name');
             $userName = $request->input('callback_query.from.username');
-            $date = strval(explode('_', $data)[1]);
+            $date = strval(Arr::get(explode('_', $data), 1));
 
             $message = 'So\'rovinggiz qabul qilindi tez orada sizga operator aloqaga chiqadi:';
             $messageRu = 'Ваш запрос принят, оператор свяжется с вами в ближайшее время:';

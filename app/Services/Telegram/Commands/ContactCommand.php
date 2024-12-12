@@ -5,6 +5,7 @@ namespace App\Services\Telegram\Commands;
 use App\Helpers\PhoneHelper;
 use App\Helpers\TelegramBotHelper;
 use App\Services\CacheService;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Telegram\Bot\Objects\Contact;
 
@@ -24,10 +25,9 @@ class ContactCommand
     {
         $chatId = $request->input('message.chat.id');
         $messageId = $request->input('message.message_id');
-        $contact = $request->input('message.contact') ?? $request->input('message.text');
+        $phoneNumber = Arr::get($request->input('message.contact'), 'phone_number', $request->input('message.text'));
 
-        if (isset($contact['phone_number']) || PhoneHelper::isValidPhoneNumber($contact)) {
-            $phoneNumber = $contact['phone_number'] ?? $contact;
+        if (PhoneHelper::isValidPhoneNumber($phoneNumber)) {
 
             $response = (new ServicesCommand())->getServices($chatId, $messageId);
 
