@@ -11,7 +11,7 @@
      </div>
      <div style="color: white;padding: 15px 50px 5px 50px;float: right;font-size: 16px;">
          Last access : 11 Dec
-         2024 &nbsp; <a href="{{ route('login') }}" class="btn btn-danger square-btn-adjust">Logout</a> </div>
+         2024 &nbsp; <a href="{{ route('logout') }}" class="btn btn-danger square-btn-adjust">Logout</a> </div>
  </nav>
  <!-- NAV TOP End -->
 
