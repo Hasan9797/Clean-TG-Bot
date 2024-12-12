@@ -86,8 +86,8 @@
                                         <tbody>
                                             @foreach($users as $user)
                                             <tr class="odd gradeX">
-                                                <td>{{ $user->first_name }}</td>
-                                                <td>{{ $user->username }}</td>
+                                                <td>{{ $user->telegram_first_name }}</td>
+                                                <td>{{ $user->telegram_username }}</td>
                                                 <td>{{ $user->chat_id }}</td>
                                                 <td>{{ $user->phone }}</td>
                                                 <td>{{ $user->service }}</td>

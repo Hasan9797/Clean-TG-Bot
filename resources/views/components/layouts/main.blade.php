@@ -13,6 +13,8 @@
     <link href="assets/js/morris/morris-0.4.3.min.css" rel="stylesheet" />
     <!-- CUSTOM STYLES-->
     <link href="assets/css/custom.css" rel="stylesheet" />
+    <!---CREATE FROM--->
+    <link href="assets/css/create-form.css" rel="stylesheet" />
     <!-- GOOGLE FONTS-->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
@@ -20,7 +22,7 @@
 <body>
     <!-- /. WRAPPER  -->
     <div id="wrapper">
-        @include('partials.navbar')
+        @include('components.partials.navbar')
         {{ $slot }} <!-- slotning joylashuvi -->
     </div>
     <!-- /. WRAPPER  -->

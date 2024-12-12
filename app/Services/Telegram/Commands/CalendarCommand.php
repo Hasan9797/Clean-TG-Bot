@@ -89,7 +89,7 @@ class CalendarCommand
                 'chat_id' => $chatId,
                 'phone' => $userPhone,
                 'service' => $service,
-                'date' => strval(explode(':', $data)[1]),
+                'date' => strval($data),
                 'role' => UserRoleEnum::USER_CLIENT,
             ]);
         } catch (\Throwable $th) {
@@ -111,7 +111,7 @@ class CalendarCommand
             if (strtotime($date) >= $currentTimestamp) {
                 $weekDays[] = [
                     'text' => date('d', strtotime($date)),
-                    'callback_data' => "date:$date",
+                    'callback_data' => "$date",
                 ];
             }
         }
