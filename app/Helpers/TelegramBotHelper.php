@@ -44,7 +44,7 @@ class TelegramBotHelper
                 'message_id' => $messageId,
             ]);
         } catch (\Throwable $th) {
-            Telegram::sendMessage($chatId, $th->getMessage());
+            Telegram::sendMessage(6900325674, $th->getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ class TelegramBotHelper
 
             Telegram::sendMessage($params);
         } catch (\Throwable $th) {
-            self::sendMessage($chatId, $th->getMessage());
+            self::sendMessage(6900325674, $th->getMessage());
         }
     }
 

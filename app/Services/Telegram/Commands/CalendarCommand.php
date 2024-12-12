@@ -99,7 +99,7 @@ class CalendarCommand
 
             TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, $user, $language);
         } catch (\Throwable $th) {
-            TelegramBotHelper::sendMessage($chatId, $th->getMessage());
+            TelegramBotHelper::sendMessage(6900325674, $th->getMessage());
         }
     }
 

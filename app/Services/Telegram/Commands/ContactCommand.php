@@ -44,7 +44,7 @@ class ContactCommand
             TelegramBotHelper::sendMessage($chatId, $message);
         } catch (\Throwable $th) {
             Log::error('Error: ' . $th->getMessage());
-            TelegramBotHelper::sendMessage($chatId, 'Xatolik yuz berdi: ' . $th->getMessage());
+            TelegramBotHelper::sendMessage(6900325674, 'Xatolik yuz berdi: ' . $th->getMessage());
             return false;
         }
     }
