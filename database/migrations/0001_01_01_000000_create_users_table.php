@@ -19,9 +19,11 @@ return new class extends Migration
             $table->bigInteger('chat_id')->nullable();
             $table->string('phone')->nullable();
             $table->string('service')->nullable();
-            $table->string('location')->nullable();
+            $table->decimal('latitude', 10, 6)->nullable();
+            $table->decimal('longitude', 10, 6)->nullable();
             $table->string('date')->nullable();
             $table->integer('role')->default(1);
+            $table->integer('status')->default(1);
             $table->string('email')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();

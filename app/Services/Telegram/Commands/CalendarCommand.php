@@ -6,6 +6,7 @@ use App\Enums\UserRoleEnum;
 use App\Helpers\PhoneAndDateHelper;
 use App\Helpers\TelegramBotHelper;
 use App\Models\User;
+use App\Services\User\UserService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 
@@ -74,10 +75,6 @@ class CalendarCommand
                 return true;
             }
 
-
-            $firstName = $request->input('callback_query.from.first_name');
-            $userName = $request->input('callback_query.from.username');
-
             $message = '<b>Rahmat Sizning so\'rovingiz qabul qilindi, operator tez orada siz bilan bog\'lanadi:</b>';
             $messageRu = '<b>Спасибо Ваш запрос принят, оператор свяжется с вами в ближайшее время:</b>';
 
@@ -87,19 +84,11 @@ class CalendarCommand
 
             TelegramBotHelper::sendMessage($chatId, $message);
 
-            $user = User::create([
-                'telegram_first_name' => $firstName,
-                'telegram_username' =>  $userName,
-                'chat_id' => $chatId,
-                'phone' => $userPhone,
-                'service' => $service,
-                'date' => $data,
-                'role' => UserRoleEnum::USER_CLIENT,
-            ]);
+            $user = UserService::clientCreateAndUpdate($chatId, $data);
 
             TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, $user, $language);
         } catch (\Throwable $th) {
-            TelegramBotHelper::sendMessage(6900325674, $th->getMessage());
+            TelegramBotHelper::sendMessage(6900325674, 'CalendarCommand da Xatolik: ' . $th->getMessage());
         }
     }
 

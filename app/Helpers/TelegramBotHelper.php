@@ -90,7 +90,6 @@ class TelegramBotHelper
             return str_replace($search, $replace, $text);
         };
 
-        // Xabarni formatlash
         $messageTemplate = $language === 'lang_ru'
             ? "📝 *Новый клиент запросил:*\n"
             : "📝 *Yangi mijoz so'rovi:*\n";
@@ -126,6 +125,9 @@ class TelegramBotHelper
                     [
                         'text' => 'Joylashuvni yuborish',
                         'request_location' => true
+                    ],
+                    [
+                        'text' => 'Oldingi manzilga',
                     ]
                 ]
             ];

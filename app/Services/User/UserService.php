@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Enums\UserStatusEnum;
 use App\Models\User;
 use App\Repositories\UserRepository;
 
@@ -48,9 +49,34 @@ class UserService
         return $this->userRepository->clientsCount();
     }
 
-    public function clientCreateAndUpdate($chatId, $change)
+    public static function getByChatId($chatId)
     {
-        User::find('chat_id', $chatId)->update($change);
-        return true;
+        return User::where('chat_id', $chatId)->first();
+    }
+
+    public static function clientCreateAndUpdate($chatId, array $change)
+    {
+        try {
+            $user = self::getByChatId($chatId);
+
+            if (!$user || $user->status === UserStatusEnum::CREATE) {
+                $user = User::create($change);
+                return $user;
+            }
+
+            $user->update($change);
+            return $user;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public static function getLocationByChatId($chatId)
+    {
+        $user =  User::select('latitude', 'longitude')
+            ->where('chat_id', $chatId)
+            ->first();
+
+        return $user ? $user->toArray() : [];
     }
 }

@@ -5,7 +5,9 @@ namespace App\Services\Telegram\Commands;
 use App\Enums\ServiceEnum;
 use App\Helpers\TelegramBotHelper;
 use App\Services\CacheService;
+use App\Services\User\UserService;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class ServiceCommand
 {
@@ -30,15 +32,22 @@ class ServiceCommand
 
         $message = 'Vaxtni tanlang:';
 
-        $inlineKeyboard = CalendarCommand::sendCalendar();
+        try {
+            $inlineKeyboard = CalendarCommand::sendCalendar();
 
-        if (strval($language) === 'lang_ru') {
-            $message = 'Выберите время:';
+            if (strval($language) === 'lang_ru') {
+                $message = 'Выберите время:';
+            }
+
+            $service = ServiceEnum::getService(strval($service), $language);
+            UserService::clientCreateAndUpdate($chatId, ['service' => $service]);
+
+            TelegramBotHelper::deleteMessage($chatId, $messageId);
+            TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
+        } catch (\Throwable $th) {
+            Log::error('Error: ' . $th->getMessage());
+            TelegramBotHelper::sendMessage(6900325674, 'ServiceCommand da Xatolik: ' . $th->getMessage());
+            return false;
         }
-        $service = ServiceEnum::getService(strval($service), $language);
-        CacheService::updateCache("service_$chatId", $service);
-
-        TelegramBotHelper::deleteMessage($chatId, $messageId);
-        TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);
     }
 }

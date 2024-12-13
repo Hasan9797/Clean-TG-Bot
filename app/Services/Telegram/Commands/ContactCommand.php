@@ -2,9 +2,12 @@
 
 namespace App\Services\Telegram\Commands;
 
+use App\Enums\UserRoleEnum;
+use App\Enums\UserStatusEnum;
 use App\Helpers\PhoneAndDateHelper;
 use App\Helpers\TelegramBotHelper;
 use App\Services\CacheService;
+use App\Services\User\UserService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -35,13 +38,22 @@ class ContactCommand
                 $message = 'Нажмите кнопку ниже, чтобы отправить Manzilinglife:';
             }
 
+            $firstName = $request->input('message.from.first_name');
+            $userName = $request->input('message.from.username');
+
             if (PhoneAndDateHelper::isValidPhoneNumber($phoneNumber)) {
 
-                TelegramBotHelper::sendLocationRequest($chatId, $message);
+                $user = [
+                    'telegram_first_name' => $firstName,
+                    'telegram_username' =>  $userName,
+                    'chat_id' => $chatId,
+                    'phone' => $phoneNumber,
+                    'status' => UserStatusEnum::PINDING,
+                ];
 
-                if (!empty($response)) {
-                    CacheService::updateCache("contact_$chatId", $phoneNumber);
-                }
+                UserService::clientCreateAndUpdate($chatId, $user);
+
+                TelegramBotHelper::sendLocationRequest($chatId, $message);
 
                 return true;
             }
@@ -51,7 +63,7 @@ class ContactCommand
             TelegramBotHelper::sendMessage($chatId, $message);
         } catch (\Throwable $th) {
             Log::error('Error: ' . $th->getMessage());
-            TelegramBotHelper::sendMessage(6900325674, 'Xatolik yuz berdi: ' . $th->getMessage());
+            TelegramBotHelper::sendMessage(6900325674, 'ContactCommand da Xatolik: ' . $th->getMessage());
             return false;
         }
     }

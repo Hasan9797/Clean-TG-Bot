@@ -6,8 +6,8 @@ use Illuminate\Support\Arr;
 
 class UserRoleEnum
 {
-    const USER_ADMIN = 1;
-    const USER_CLIENT = 2;
+    const USER_CLIENT = 1;
+    const USER_ADMIN = 2;
 
     public static function getUserRoles(): array
     {

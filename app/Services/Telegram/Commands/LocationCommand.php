@@ -4,6 +4,7 @@ namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
 use App\Services\CacheService;
+use App\Services\User\UserService;
 use Illuminate\Support\Facades\Log;
 
 class LocationCommand
@@ -12,7 +13,7 @@ class LocationCommand
     {
         $location = $request->input('message.location') ?? $request->input('message.text');
 
-        if (!$location) {
+        if (!$location || trim($location) != 'Oldingi manzilga') {
             return false;
         }
         return true;
@@ -26,22 +27,29 @@ class LocationCommand
             $messageId = $request->input('message.message_id');
             $location = $request->input('message.location') ?? $request->input('message.text');
 
+            if(is_string($location)){
+               $location = UserService::getLocationByChatId($chatId);
+               if(empty($location)){
+                 TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjudemas! \nIltimos qaytadan manzilinggizni yuboring 👇");
+                 return false;
+               }
+            }
+
+            $userLocation = [
+                'latitude' => $location['latitude'],
+                'longitude' => $location['longitude'],
+            ];
+
+            UserService::clientCreateAndUpdate($chatId, $userLocation);
+
             $response = (new ServicesCommand())->getServices($chatId, $messageId);
 
-            if (!empty($response)) {
-                CacheService::updateCache("location_$chatId", $location);
-            }
 
             return true;
         } catch (\Throwable $th) {
             Log::error('Error: ' . $th->getMessage());
-            TelegramBotHelper::sendMessage(6900325674, 'Xatolik yuz berdi: ' . $th->getMessage());
+            TelegramBotHelper::sendMessage(6900325674, 'LocationCommand da Xatolik: ' . $th->getMessage());
             return false;
         }
     }
-
-    // public static function sendLocation($chatId, $location){
-    //     $message = 'Sizning joylashuvingiz: '. $location;
-    //     TelegramBotHelper::sendMessage($chatId, $message);
-    // }
 }
