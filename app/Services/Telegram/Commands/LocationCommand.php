@@ -4,7 +4,9 @@ namespace App\Services\Telegram\Commands;
 
 use App\Enums\UserStatusEnum;
 use App\Helpers\TelegramBotHelper;
+use App\Models\User;
 use App\Services\User\UserService;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class LocationCommand
@@ -32,45 +34,45 @@ class LocationCommand
             $chatId = $request->input('message.chat.id');
             $messageId = $request->input('message.message_id');
             $location = $request->input('message.location') ?? $request->input('message.text');
-            $userLocation = [];
 
-            $user = UserService::getLocationByChatId($chatId);
+            $user = UserService::getByChatId($chatId);
 
-            if (empty($location) || !is_array($location)) {
-                if (is_null($user) || !isset($user->latitude) || !isset($user->longitude)) {
-                    StartCommand::sendLanguageButtons($chatId, "Sizning ma'lumotinggiz topilmadi! Iltimos tilni tanlang:\n Ваша информация не найдена! Пожалуйста, укажите язык: 👇");
-                    return false;
+            if (!empty($user) && ((is_array($location) && isset($location['latitude'], $location['longitude'])) || is_string($location))) {
+
+                $data = [
+                    'latitude' => $location['latitude'],
+                    'longitude' => $location['longitude'],
+                ];
+
+                if (is_string($location)) {
+                    $data = [
+                        'latitude' => $user->latitude,
+                        'longitude' => $user->longitude,
+                    ];
                 }
 
-                $latitude = $user->latitude;
-                $longitude = $user->longitude;
-            } else {
+                (intval($user->status) == UserStatusEnum::CREATE) ?
+                    User::create(array_merge($data, [
+                        'telegram_first_name' => $user->telegram_first_name,
+                        'telegram_username' => $user->telegram_username,
+                        'chat_id' => $chatId,
+                        'phone' => $user->phone,
+                        'status' => UserStatusEnum::PENDING,
+                    ])) :
+                    $user->update($data);
 
-                $latitude = $location['latitude'] ?? null;
-                $longitude = $location['longitude'] ?? null;
-
-                if (is_null($latitude) || is_null($longitude)) {
-                    TelegramBotHelper::sendLocationRequest($chatId, "Location ma'lumotlari yetarli emas. Iltimos qayta jo'nating");
-                    return false;
-                }
+                (new ServicesCommand())->getServices($chatId, $messageId);
+                return true;
             }
 
-            // User mavjud yoki koordinatalar qayd etilgan
-            $userLocation = [
-                'telegram_first_name' => $user->telegram_first_name ?? null,
-                'telegram_username' => $user->telegram_username ?? null,
-                'chat_id' => $chatId,
-                'phone' => $user->phone ?? null,
-                'status' => UserStatusEnum::PENDING,
-                'latitude' => $latitude,
-                'longitude' => $longitude,
-            ];
+            $message = "Sizda ma'lumotlar topilmadi. Iltimos tilni tanlang";
+            $cachLanguage = Cache::get("language_$chatId", 'lang_uz');
 
-            UserService::clientCreateOrUpdate($chatId, $userLocation);
-
-            (new ServicesCommand())->getServices($chatId, $messageId);
-
-            return true;
+            if ($cachLanguage == 'lang_ru') {
+                $message = 'Ваши данные не найдены. Пожалуйста, выберите язык:';
+            }
+            StartCommand::sendLanguageButtons($chatId, $message);
+            return false;
         } catch (\Throwable $th) {
             Log::error('Error: ' . $th->getMessage());
             TelegramBotHelper::sendMessage(6900325674, 'LocationCommand da Xatolik: ' . $th->getMessage());

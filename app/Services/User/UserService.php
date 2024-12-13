@@ -55,36 +55,27 @@ class UserService
         return User::where('chat_id', intval($chatId))->first();
     }
 
-    public static function clientCreateOrUpdate($chatId, array $change)
+    public static function clientCreate(array $change)
     {
         try {
-            $user = User::where('chat_id', $chatId)->first();
-
-            if ($user && $user->status === UserStatusEnum::CREATE) {
-                return User::create($change);
-            }
-
-            if ($user && $user->status === UserStatusEnum::PENDING) {
-                $user->update($change);
-                return $user->refresh();
-            }
-
-            if (!$user) {
-                return User::create($change);
-            }
-
-            return $user;
+            return User::create($change);
         } catch (\Throwable $th) {
-            Log::error("User yaratish yoki yangilashda xatolik: " . $th->getMessage(), [
-                'chat_id' => $chatId,
-                'changes' => $change,
-            ]);
             throw $th;
         }
     }
 
+    public static function clientUpdate($chatId, array $change)
+    {
+        $user = User::where('chat_id', $chatId)
+            ->where('status', UserStatusEnum::PENDING)
+            ->first();
 
-
+        if ($user) {
+            $user->update($change);
+            return $user->refresh();
+        }
+        return null;
+    }
 
     public static function getLocationByChatId($chatId)
     {

@@ -31,7 +31,7 @@ class LanguageCommand
             Cache::delete("language_$chatId");
         }
 
-        Cache::put("language_$chatId", $language, 7200);
+        Cache::put("language_$chatId", $language, 14400);
 
         $message = 'Iltimos, telefon raqamingizni yozib jo\'nating yoki quyidagi tugma orqali o\'zingizning raqaminggizni yuboring:';
 
