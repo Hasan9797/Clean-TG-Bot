@@ -59,6 +59,7 @@ class LocationCommand
                     'latitude' => $latitude,
                     'longitude' => $longitude,
                 ];
+                Log::info('User:', $user->toArray());
             } else {
 
                 $user = UserService::getLocationByChatId($chatId);
@@ -77,6 +78,7 @@ class LocationCommand
                     'latitude' => $user->latitude,
                     'longitude' => $user->longitude,
                 ];
+                Log::info('User:', $user->toArray());
             }
 
             UserService::clientCreateOrUpdate($chatId, $userLocation);
