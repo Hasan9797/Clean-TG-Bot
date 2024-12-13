@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Enums\UserStatusEnum;
+use App\Helpers\TelegramBotHelper;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Log;
@@ -68,9 +69,11 @@ class UserService
                 'status' => $change['status'] ?? UserStatusEnum::PINDING,
                 'phone' => $change['phone'] ?? null,
             ]);
+            Log::info('User Create:', $user);
         }
 
         $user->update($change);
+        Log::info('User Update:', $user);
         return $user;
 
     } catch (\Throwable $th) {
