@@ -46,6 +46,11 @@ class LocationCommand
 
                 $user = UserService::getLocationByChatId($chatId);
                 
+                if (empty($user) || empty($user->latitude) || empty($user->longitude)) {
+                    StartCommand::sendLanguageButtons($chatId, "Sizning ma'lumotinggiz topilmadi! Iltimos tilni tanlang:\n Ваша информация не найдена! Пожалуйста, укажите язык: 👇");
+                    return false;
+                }
+
                 $userLocation = [
                     'telegram_first_name' => $user->telegram_first_name,
                     'telegram_username' =>  $user->telegram_username,
