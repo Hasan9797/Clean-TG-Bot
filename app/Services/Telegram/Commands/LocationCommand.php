@@ -47,9 +47,9 @@ class LocationCommand
                     'longitude' => $longitude,
                 ];
             } else {
-                $location = UserService::getLocationByChatId($chatId);
-                if (empty($location)) {
-                    Log::info('No location:', $location);
+                $userLocation = UserService::getLocationByChatId($chatId);
+                if (empty($userLocation)) {
+                    Log::info('No location:', $userLocation);
                     TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjudemas! \nIltimos qaytadan manzilinggizni yuboring 👇");
                     return false;
                 }
