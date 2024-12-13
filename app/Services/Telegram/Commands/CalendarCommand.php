@@ -61,8 +61,8 @@ class CalendarCommand
 
             TelegramBotHelper::deleteMessage($chatId, $messageId);
 
-            $message = '<b>Rahmat Sizning so\'rovingiz qabul qilindi, operator tez orada siz bilan bog\'lanadi:</b>';
-            $messageRu = '<b>Спасибо Ваш запрос принят, оператор свяжется с вами в ближайшее время:</b>';
+            $message = "<b>Rahmat Sizning so'rovingiz qabul qilindi, operator tez orada siz bilan bog'lanadi:</b>";
+            $messageRu = "<b>Спасибо Ваш запрос принят, оператор свяжется с вами в ближайшее время:</b>";
 
             if (strval($language) === 'lang_ru') {
                 $message = $messageRu;

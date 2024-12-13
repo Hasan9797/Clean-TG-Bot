@@ -33,6 +33,7 @@ class TelegramBotHelper
         return Telegram::sendMessage([
             'chat_id' => $chatId,
             'text' => $message,
+            'parse_mode' => 'HTML',
         ]);
     }
 
