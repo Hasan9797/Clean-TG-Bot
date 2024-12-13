@@ -25,6 +25,7 @@ class User extends Authenticatable
         'role',
         'date',
         'service',
+        'status',
         'latitude',
         'longitude',
         'chat_id',
