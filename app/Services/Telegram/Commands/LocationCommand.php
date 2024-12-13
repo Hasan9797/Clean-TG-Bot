@@ -83,9 +83,7 @@ class LocationCommand
             'phone' => $user->phone,
             'status' => UserStatusEnum::PENDING,
         ]);
-
-        (intval($user->status) == UserStatusEnum::CREATE) ?
-            UserService::clientCreate($userData) : UserService::clientUpdate($chatId, $data);
+        UserService::clientCreate($chatId, $userData);
     }
 
     private function sendLanguageSelection($chatId)

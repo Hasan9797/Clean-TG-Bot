@@ -40,7 +40,7 @@ class ServiceCommand
             }
 
             $service = ServiceEnum::getService(strval($service), $language);
-            UserService::clientUpdate($chatId, ['service' => $service]);
+            CacheService::updateCache("service_$chatId", $service);
 
             TelegramBotHelper::deleteMessage($chatId, $messageId);
             TelegramBotHelper::inlineKeyboardAndMessage($chatId, $message, $inlineKeyboard);

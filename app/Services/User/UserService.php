@@ -55,9 +55,18 @@ class UserService
         return User::where('chat_id', intval($chatId))->first();
     }
 
-    public static function clientCreate(array $change)
+    public static function clientCreate($chatId, array $change)
     {
         try {
+            $user = User::where('chat_id', intval($chatId))
+                ->where('status', UserStatusEnum::PENDING)
+                ->first();
+
+            if ($user) {
+                $user->update($change);
+                return $user->refresh();
+            }
+
             return User::create($change);
         } catch (\Throwable $th) {
             throw $th;

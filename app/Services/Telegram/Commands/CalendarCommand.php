@@ -71,8 +71,9 @@ class CalendarCommand
             }
 
             TelegramBotHelper::sendMessage($chatId, $message, 'HTML');
-
-            $user = UserService::clientUpdate($chatId, ['date' => $data, 'status' => UserStatusEnum::CREATE]);
+            
+            $clientService = Cache::get("services_$chatId");
+            $user = UserService::clientUpdate($chatId, ['date' => $data, 'status' => UserStatusEnum::CREATE, 'service' => $clientService]);
             Log::info('User:', $user->toArray());
 
             TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, $user, $language);

@@ -56,7 +56,7 @@ class ContactCommand
                 'status' => UserStatusEnum::PENDING,
             ];
 
-            UserService::clientCreate($user);
+            UserService::clientCreate(chatId: $chatId, change: $user);
 
             TelegramBotHelper::sendLocationRequest($chatId, $message);
 
