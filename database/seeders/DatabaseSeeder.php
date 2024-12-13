@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             'phone' => '+998998115463',
             'email' => 'admin',
             'password' => 'admin123',
-            'role' => 1,
+            'role' => 2,
         ]);
     }
 }
