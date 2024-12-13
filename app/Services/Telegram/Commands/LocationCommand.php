@@ -33,7 +33,20 @@ class LocationCommand
             $messageId = $request->input('message.message_id');
             $location = $request->input('message.location') ?? $request->input('message.text');
 
-            if (is_string($location)) {
+            if (is_array($location)) {
+                $latitude = $location['latitude'] ?? null;
+                $longitude = $location['longitude'] ?? null;
+
+                if (is_null($latitude) || is_null($longitude)) {
+                    TelegramBotHelper::sendLocationRequest($chatId, "Location ma'lumotlari yetarli emas. Iltimos qayta jo'nating");
+                    return false;
+                }
+
+                $userLocation = [
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                ];
+            } else {
                 $location = UserService::getLocationByChatId($chatId);
                 if (empty($location)) {
                     Log::info('No location:', $location);
@@ -41,16 +54,9 @@ class LocationCommand
                     return false;
                 }
             }
-
-            $userLocation = [
-                'latitude' => $location['latitude'],
-                'longitude' => $location['longitude'],
-            ];
-
             UserService::clientCreateAndUpdate($chatId, $userLocation);
 
-            $response = (new ServicesCommand())->getServices($chatId, $messageId);
-
+            (new ServicesCommand())->getServices($chatId, $messageId);
 
             return true;
         } catch (\Throwable $th) {
