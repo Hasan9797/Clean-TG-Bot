@@ -66,7 +66,7 @@ class UserService
 
             if ($user && $user->status === UserStatusEnum::PENDING) {
                 $user->update($change);
-                return $user;
+                return $user->refresh();
             }
 
             if (!$user) {
