@@ -55,34 +55,34 @@ class UserService
         return User::where('chat_id', intval($chatId))->first();
     }
 
-    public static function clientCreateAndUpdate($chatId, array $change)
-{
-    try {
-        $user = self::getByChatId($chatId);
+    public static function clientCreateOrUpdate($chatId, array $change)
+    {
+        try {
+            $user = User::where('chat_id', $chatId)->first();
 
-        if (!$user || (intval($user->status) === UserStatusEnum::CREATE)) {
-            return User::create([
+            if ($user && $user->status === UserStatusEnum::CREATE) {
+                return User::create($change);
+            }
+
+            if ($user && $user->status === UserStatusEnum::PENDING) {
+                $user->update($change);
+                return $user;
+            }
+
+            if (!$user) {
+                return User::create($change);
+            }
+
+            return $user;
+        } catch (\Throwable $th) {
+            Log::error("User yaratish yoki yangilashda xatolik: " . $th->getMessage(), [
                 'chat_id' => $chatId,
-                'telegram_first_name' => $change['telegram_first_name'] ?? null,
-                'telegram_username' => $change['telegram_username'] ?? null,
-                'status' => $change['status'] ?? UserStatusEnum::PINDING,
-                'phone' => $change['phone'] ?? null,
+                'changes' => $change,
             ]);
-            Log::info("User yaratish muvaffaqiyatli: ", $user->toArray());
+            throw $th;
         }
-
-        $user->update($change);
-        Log::info('User Update:', $user->toArray());
-        return $user;
-
-    } catch (\Throwable $th) {
-        Log::error("User yaratish yoki yangilashda xatolik: " . $th->getMessage(), [
-            'chat_id' => $chatId,
-            'changes' => $change,
-        ]);
-        throw $th;
     }
-}
+
 
 
 

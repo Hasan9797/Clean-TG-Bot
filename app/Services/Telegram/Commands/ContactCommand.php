@@ -53,11 +53,11 @@ class ContactCommand
                 'telegram_username' =>  $userName,
                 'chat_id' => $chatId,
                 'phone' => $phoneNumber,
-                'status' => UserStatusEnum::PINDING,
+                'status' => UserStatusEnum::PENDING,
             ];
             // User::create($user);
 
-            UserService::clientCreateAndUpdate($chatId, $user);
+            UserService::clientCreateOrUpdate($chatId, $user);
 
             TelegramBotHelper::sendLocationRequest($chatId, $message);
 
