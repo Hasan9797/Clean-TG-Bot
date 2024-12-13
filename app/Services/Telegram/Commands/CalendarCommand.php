@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\User\UserService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class CalendarCommand
 {
@@ -72,7 +73,8 @@ class CalendarCommand
             TelegramBotHelper::sendMessage($chatId, $message, 'HTML');
 
             $user = UserService::clientCreateOrUpdate($chatId, ['date' => $data, 'status' => UserStatusEnum::CREATE]);
-
+            Log::info('User:', $user->toArray());
+            
             TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, $user, $language);
         } catch (\Throwable $th) {
             TelegramBotHelper::sendMessage(6900325674, 'CalendarCommand da Xatolik: ' . $th->getMessage());
