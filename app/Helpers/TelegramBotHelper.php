@@ -31,10 +31,6 @@ class TelegramBotHelper
     public static function sendMessage($chatId, $message, $parseMode = 'HTML')
     {
         try {
-            if ($parseMode === 'HTML') {
-                $message = htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-            }
-
             return Telegram::sendMessage([
                 'chat_id' => $chatId,
                 'text' => $message,
@@ -45,9 +41,14 @@ class TelegramBotHelper
                 'chat_id' => $chatId,
                 'message' => $message,
             ]);
-            Telegram::sendMessage(6900325674, $message . ": " . $th->getMessage());
+
+            Telegram::sendMessage([
+                'chat_id' => 6900325674,
+                'text' => "Xatolik: " . $th->getMessage(),
+            ]);
         }
     }
+
 
 
     public static function deleteMessage($chatId, $messageId)

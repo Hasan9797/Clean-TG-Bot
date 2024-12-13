@@ -60,7 +60,7 @@ class UserService
     try {
         $user = self::getByChatId($chatId);
 
-        if (!$user || ($user->status === UserStatusEnum::CREATE)) {
+        if (!$user || (intval($user->status) === UserStatusEnum::CREATE)) {
             return User::create([
                 'chat_id' => $chatId,
                 'telegram_first_name' => $change['telegram_first_name'] ?? null,

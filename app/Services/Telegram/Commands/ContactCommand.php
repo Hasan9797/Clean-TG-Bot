@@ -6,6 +6,7 @@ use App\Enums\UserRoleEnum;
 use App\Enums\UserStatusEnum;
 use App\Helpers\PhoneAndDateHelper;
 use App\Helpers\TelegramBotHelper;
+use App\Models\User;
 use App\Services\CacheService;
 use App\Services\User\UserService;
 use Illuminate\Support\Arr;
@@ -50,9 +51,11 @@ class ContactCommand
             $user = [
                 'telegram_first_name' => $firstName,
                 'telegram_username' =>  $userName,
+                'chat_id' => $chatId,
                 'phone' => $phoneNumber,
                 'status' => UserStatusEnum::PINDING,
             ];
+            // User::create($user);
 
             UserService::clientCreateAndUpdate($chatId, $user);
 
