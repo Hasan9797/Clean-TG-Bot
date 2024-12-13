@@ -64,10 +64,12 @@ class LocationCommand
                 'longitude' => $location['longitude'],
             ];
         } elseif (is_string($location)) {
-            return [
-                'latitude' => $user->latitude,
-                'longitude' => $user->longitude,
-            ];
+            if (isset($user->latitude, $user->longitude)) {
+                return [
+                    'latitude' => $user->latitude,
+                    'longitude' => $user->longitude,
+                ];
+            }
         }
         return null;
     }
