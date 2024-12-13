@@ -92,6 +92,6 @@ class UserService
             ->where('chat_id', intval($chatId))
             ->first();
 
-        return $user ? $user->toArray() : [];
+        return $user ? $user->toArray() : null;
     }
 }

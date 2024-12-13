@@ -33,7 +33,7 @@ class LocationCommand
             $messageId = $request->input('message.message_id');
             $location = $request->input('message.location') ?? $request->input('message.text');
             $userLocation = [];
-            
+
             if (!empty($location) && is_array($location)) {
                 $latitude = $location['latitude'] ?? null;
                 $longitude = $location['longitude'] ?? null;
@@ -49,7 +49,7 @@ class LocationCommand
                 ];
             } else {
                 $userLocation = UserService::getLocationByChatId($chatId);
-                if (empty($userLocation)) {
+                if (is_null($userLocation)) {
                     StartCommand::sendLanguageButtons($chatId, "Sizning ma'lumotinggiz topilmadi! Iltimos tilni tanlang:\n Ваша информация не найдена! Пожалуйста, укажите язык: 👇");
                     return false;
                 }
