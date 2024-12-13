@@ -28,20 +28,24 @@ class TelegramBotHelper
         ]);
     }
 
-    public static function sendMessage($chatId, $message)
+    public static function sendMessage($chatId, $message, $parseMode = 'HTML')
     {
         try {
+            if ($parseMode === 'HTML') {
+                $message = htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            }
 
             return Telegram::sendMessage([
                 'chat_id' => $chatId,
                 'text' => $message,
+                'parse_mode' => $parseMode,
             ]);
         } catch (\Throwable $th) {
             Log::error("Telegramga xabar yuborishda xatolik: " . $th->getMessage(), [
                 'chat_id' => $chatId,
                 'message' => $message,
             ]);
-            Telegram::sendMessage(6900325674, $th->getMessage());
+            Telegram::sendMessage(6900325674, $message . ": " . $th->getMessage());
         }
     }
 
