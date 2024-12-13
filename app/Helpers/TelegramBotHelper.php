@@ -28,14 +28,27 @@ class TelegramBotHelper
         ]);
     }
 
-    public static function sendMessage($chatId, $message)
+    public static function sendMessage($chatId, $message, $parseMode = 'MarkdownV2')
     {
-        return Telegram::sendMessage([
-            'chat_id' => $chatId,
-            'text' => $message,
-            'parse_mode' => 'HTML',
-        ]);
+        try {
+            if ($parseMode === 'MarkdownV2') {
+                $message = self::escapeMarkdownV2($message);
+            }
+
+            return Telegram::sendMessage([
+                'chat_id' => $chatId,
+                'text' => $message,
+                'parse_mode' => $parseMode, // HTML yoki MarkdownV2
+            ]);
+        } catch (\Throwable $th) {
+            Log::error("Telegramga xabar yuborishda xatolik: " . $th->getMessage(), [
+                'chat_id' => $chatId,
+                'message' => $message,
+            ]);
+            throw $th;
+        }
     }
+
 
     public static function deleteMessage($chatId, $messageId)
     {
@@ -156,5 +169,13 @@ class TelegramBotHelper
         } catch (\Throwable $th) {
             Log::error("Telegram joylashuv so'rovida xatolik: " . $th->getMessage());
         }
+    }
+
+    private static function escapeMarkdownV2($text)
+    {
+        $search = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
+        $replace = array_map(fn($char) => '\\' . $char, $search);
+
+        return str_replace($search, $replace, $text);
     }
 }
