@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram\Commands;
 
+use App\Enums\UserStatusEnum;
 use App\Helpers\TelegramBotHelper;
 use App\Services\User\UserService;
 use Illuminate\Log\Logger;
@@ -43,10 +44,18 @@ class LocationCommand
                     return false;
                 }
 
+                $user = UserService::getLocationByChatId($chatId);
+                
                 $userLocation = [
-                    'latitude' => $latitude,
-                    'longitude' => $longitude,
+                    'telegram_first_name' => $user->telegram_first_name,
+                    'telegram_username' =>  $user->telegram_username,
+                    'chat_id' => $chatId,
+                    'phone' => $user->phone,
+                    'status' => UserStatusEnum::PENDING,
+                    'latitude' => $user->latitude,
+                    'longitude' => $user->longitude,
                 ];
+
             } else {
 
                 $user = UserService::getLocationByChatId($chatId);
@@ -57,10 +66,16 @@ class LocationCommand
                 }
 
                 $userLocation = [
+                    'telegram_first_name' => $user->telegram_first_name,
+                    'telegram_username' =>  $user->telegram_username,
+                    'chat_id' => $chatId,
+                    'phone' => $user->phone,
+                    'status' => UserStatusEnum::PENDING,
                     'latitude' => $user->latitude,
                     'longitude' => $user->longitude,
                 ];
             }
+
             UserService::clientCreateOrUpdate($chatId, $userLocation);
 
             (new ServicesCommand())->getServices($chatId, $messageId);
