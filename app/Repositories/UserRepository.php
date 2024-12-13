@@ -15,7 +15,7 @@ class UserRepository
 
     public function admin($limit = 15)
     {
-        return User::where('role', UserRoleEnum::USER_ADMIN)->toArray();
+        return User::where('role', UserRoleEnum::USER_ADMIN)->paginate($limit);
     }
 
     public function store($data)
