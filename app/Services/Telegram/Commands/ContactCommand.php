@@ -18,7 +18,7 @@ class ContactCommand
     {
         $contact = $request->input('message.contact') ?? $request->input('message.text');
 
-        if (!$contact) {
+        if (!$contact || PhoneAndDateHelper::isValidPhoneNumber($contact)) {
             return false;
         }
         return true;
