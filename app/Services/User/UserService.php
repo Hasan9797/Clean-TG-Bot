@@ -88,6 +88,7 @@ class UserService
 
     public static function getLocationByChatId($chatId)
     {
-        return User::where('chat_id', intval($chatId))->first();
+        $user = User::where('chat_id', intval($chatId))->first();
+        return $user ?? null;
     }
 }

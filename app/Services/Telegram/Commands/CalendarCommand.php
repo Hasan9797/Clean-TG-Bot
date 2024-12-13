@@ -73,7 +73,7 @@ class CalendarCommand
 
             $user = UserService::clientCreateOrUpdate($chatId, ['date' => $data, 'status' => UserStatusEnum::CREATE]);
 
-            TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, (object)$user, $language);
+            TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, $user, $language);
         } catch (\Throwable $th) {
             TelegramBotHelper::sendMessage(6900325674, 'CalendarCommand da Xatolik: ' . $th->getMessage());
         }
