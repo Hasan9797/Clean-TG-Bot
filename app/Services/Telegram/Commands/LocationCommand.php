@@ -5,7 +5,6 @@ namespace App\Services\Telegram\Commands;
 use App\Enums\UserStatusEnum;
 use App\Helpers\TelegramBotHelper;
 use App\Services\User\UserService;
-use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
 
 class LocationCommand
@@ -45,8 +44,8 @@ class LocationCommand
                 }
 
                 $user = UserService::getLocationByChatId($chatId);
-                
-                if (empty($user) || empty($user->latitude) || empty($user->longitude)) {
+
+                if (empty($user)) {
                     StartCommand::sendLanguageButtons($chatId, "Sizning ma'lumotinggiz topilmadi! Iltimos tilni tanlang:\n Ваша информация не найдена! Пожалуйста, укажите язык: 👇");
                     return false;
                 }
@@ -57,10 +56,9 @@ class LocationCommand
                     'chat_id' => $chatId,
                     'phone' => $user->phone,
                     'status' => UserStatusEnum::PENDING,
-                    'latitude' => $user->latitude,
-                    'longitude' => $user->longitude,
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
                 ];
-
             } else {
 
                 $user = UserService::getLocationByChatId($chatId);
