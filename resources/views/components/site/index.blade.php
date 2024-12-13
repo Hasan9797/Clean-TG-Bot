@@ -83,6 +83,8 @@
                                                 <th>Телефон</th>
                                                 <th>Услуга</th>
                                                 <th>Дата</th>
+                                                <th>Широта</th>
+                                                <th>Долгота</th>
                                                 <th>Создано</th>
                                             </tr>
                                         </thead>
@@ -95,6 +97,8 @@
                                                 <td>{{ $user->phone }}</td>
                                                 <td>{{ $user->service }}</td>
                                                 <td>{{ $user->date }}</td>
+                                                <td>{{ $user->latitude }}</td>
+                                                <td>{{ $user->longitude }}</td>
                                                 <td>{{ $user->created_at }}</td>
                                             </tr>
                                             @endforeach

@@ -50,7 +50,6 @@ class ContactCommand
             $user = [
                 'telegram_first_name' => $firstName,
                 'telegram_username' =>  $userName,
-                'chat_id' => $chatId,
                 'phone' => $phoneNumber,
                 'status' => UserStatusEnum::PINDING,
             ];
@@ -60,7 +59,6 @@ class ContactCommand
             TelegramBotHelper::sendLocationRequest($chatId, $message);
 
             return true;
-
         } catch (\Throwable $th) {
             Log::error('Error: ' . $th->getMessage());
             TelegramBotHelper::sendMessage(6900325674, 'ContactCommand da Xatolik: ' . $th->getMessage());

@@ -5,6 +5,7 @@ namespace App\Services\User;
 use App\Enums\UserStatusEnum;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -51,25 +52,37 @@ class UserService
 
     public static function getByChatId($chatId)
     {
-        return User::where('chat_id', $chatId)->first();
+        return User::where('chat_id', intval($chatId))->first();
     }
 
     public static function clientCreateAndUpdate($chatId, array $change)
-    {
-        try {
-            $user = self::getByChatId($chatId);
+{
+    try {
+        $user = self::getByChatId($chatId);
 
-            if (!$user || $user->status === UserStatusEnum::CREATE) {
-                $user = User::create($change);
-                return $user;
-            }
-
-            $user->update($change);
-            return $user;
-        } catch (\Throwable $th) {
-            throw $th;
+        if (!$user || ($user->status === UserStatusEnum::CREATE)) {
+            return User::create([
+                'chat_id' => $chatId,
+                'telegram_first_name' => $change['telegram_first_name'] ?? null,
+                'telegram_username' => $change['telegram_username'] ?? null,
+                'status' => $change['status'] ?? UserStatusEnum::PINDING,
+                'phone' => $change['phone'] ?? null,
+            ]);
         }
+
+        $user->update($change);
+        return $user;
+
+    } catch (\Throwable $th) {
+        Log::error("User yaratish yoki yangilashda xatolik: " . $th->getMessage(), [
+            'chat_id' => $chatId,
+            'changes' => $change,
+        ]);
+        throw $th;
     }
+}
+
+
 
     public static function getLocationByChatId($chatId)
     {
