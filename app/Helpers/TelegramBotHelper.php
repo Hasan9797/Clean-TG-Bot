@@ -97,7 +97,6 @@ class TelegramBotHelper
 
     public static function sendClientRequestMessage($chatId, $user, $language)
     {
-        // Maxsus belgilarni qochirish uchun funksiya
         $escapeMarkdown = function ($text) {
             $search = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
             $replace = array_map(fn($char) => '\\' . $char, $search);
@@ -108,14 +107,13 @@ class TelegramBotHelper
             ? "📝 *Новый клиент запросил:*\n"
             : "📝 *Yangi mijoz so'rovi:*\n";
 
-        $messageTemplate .= "👤 *" . ($language === 'lang_ru' ? 'Имя клиента' : 'Foydalanuvchi') . ":* " . $escapeMarkdown($user->telegram_first_name) . "\n";
-        $messageTemplate .= "📛 *" . ($language === 'lang_ru' ? 'Имя пользователя' : 'Username') . ":* @" . $escapeMarkdown($user->telegram_username) . "\n";
-        $messageTemplate .= "📱 *" . ($language === 'lang_ru' ? 'Номер телефона' : 'Telefon') . ":* " . $escapeMarkdown($user->phone) . "\n";
-        $messageTemplate .= "🛠️ *" . ($language === 'lang_ru' ? 'Услуга' : 'Xizmat turi') . ":* " . $escapeMarkdown($user->service) . "\n";
-        $messageTemplate .= "📅 *" . ($language === 'lang_ru' ? 'Дата' : 'Sana') . ":* " . $escapeMarkdown($user->date) . "\n\n";
-        $messageTemplate .= "📍 *" . ($language === 'lang_ru' ? 'Адрес местонахождения клиента:' : 'Mizjozning joylashuv manzili:*') . "\n";
+        $messageTemplate .= "👤 *" . ($language === 'lang_ru' ? 'Имя клиента' : 'Foydalanuvchi') . ":* " . $escapeMarkdown($user->telegram_first_name ?? 'Noma\'lum') . "\n";
+        $messageTemplate .= "📛 *" . ($language === 'lang_ru' ? 'Имя пользователя' : 'Username') . ":* @" . $escapeMarkdown($user->telegram_username ?? 'Noma\'lum') . "\n";
+        $messageTemplate .= "📱 *" . ($language === 'lang_ru' ? 'Номер телефона' : 'Telefon') . ":* " . $escapeMarkdown($user->phone ?? 'Noma\'lum') . "\n";
+        $messageTemplate .= "🛠️ *" . ($language === 'lang_ru' ? 'Услуга' : 'Xizmat turi') . ":* " . $escapeMarkdown($user->service ?? 'Noma\'lum') . "\n";
+        $messageTemplate .= "📅 *" . ($language === 'lang_ru' ? 'Дата' : 'Sana') . ":* " . $escapeMarkdown($user->date ?? 'Noma\'lum') . "\n\n";
+        $messageTemplate .= "📍 *" . ($language === 'lang_ru' ? 'Адрес местонахождения клиента:*' : 'Mijozning joylashuv manzili:*') . "\n";
 
-        // Telegramga xabar yuborish
         try {
             Telegram::sendMessage([
                 'chat_id' => $chatId,
@@ -123,16 +121,21 @@ class TelegramBotHelper
                 'parse_mode' => 'MarkdownV2',
             ]);
 
-            Telegram::sendLocation([
-                'chat_id' => $chatId,
-                'latitude' => $user->latitude,
-                'longitude' => $user->longitude,
-            ]);
+            if (isset($user->latitude, $user->longitude)) {
+                Telegram::sendLocation([
+                    'chat_id' => $chatId,
+                    'latitude' => $user->latitude,
+                    'longitude' => $user->longitude,
+                ]);
+            }
         } catch (\Throwable $e) {
-            self::sendMessage(6900325674, $e->getMessage());
-            Log::error("Telegram xabar yuborishda xatolik: " . $e->getMessage());
+            Log::error("Telegram xabar yuborishda xatolik: " . $e->getMessage(), [
+                'chat_id' => $chatId,
+                'user' => $user,
+            ]);
         }
     }
+
 
     public static function sendLocationRequest($chatId, $message = null)
     {
