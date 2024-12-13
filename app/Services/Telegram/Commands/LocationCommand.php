@@ -33,7 +33,7 @@ class LocationCommand
             $messageId = $request->input('message.message_id');
             $location = $request->input('message.location') ?? $request->input('message.text');
 
-            if (is_array($location)) {
+            if (!empty($location) && is_array($location)) {
                 $latitude = $location['latitude'] ?? null;
                 $longitude = $location['longitude'] ?? null;
 
@@ -48,8 +48,7 @@ class LocationCommand
                 ];
             } else {
                 if (empty($userLocation) || !isset($userLocation['latitude'], $userLocation['longitude'])) {
-                    Log::info('Foydalanuvchi joylashuvi topilmadi. Yangi joylashuv so‘rov yuborilmoqda.', ['chat_id' => $chatId]);
-                    TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjud emas! \nIltimos qaytadan manzilinggizni yuboring 👇");
+                    StartCommand::sendLanguageButtons($chatId, "Sizning ma'lumotinggiz topilmadi! Iltimos tilni nanlang: \n Ваша информация не найдена! Пожалуйста, укажите язык: 👇");
                     return false;
                 }
             }

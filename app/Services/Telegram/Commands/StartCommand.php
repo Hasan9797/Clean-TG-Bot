@@ -19,7 +19,11 @@ class StartCommand
     {
         $chatId = $request->input('message.chat.id');
         $message = 'Tilni tanlang / Выберите язык:';
+        self::sendLanguageButtons($chatId, $message);
+    }
 
+    public static function sendLanguageButtons($chatId, $message)
+    {
         $inlineKeyboard = [
             'inline_keyboard' => [
                 [

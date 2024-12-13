@@ -20,7 +20,11 @@ class LanguageCommand
         $chatId = $request->input('callback_query.message.chat.id');
         $language = $request->input('callback_query.data');
         $messageId = $request->input('callback_query.message.message_id');
+        self::changeLanguage($chatId, $language, $messageId);
+    }
 
+    public static function changeLanguage($chatId, $language, $messageId)
+    {
         $cachLanguage = Cache::get("language_$chatId");
 
         if ($cachLanguage) {
@@ -37,5 +41,6 @@ class LanguageCommand
 
         TelegramBotHelper::deleteMessage($chatId, $messageId);
         TelegramBotHelper::sendPhoneRequest($chatId, $message);
+        return true;
     }
 }
