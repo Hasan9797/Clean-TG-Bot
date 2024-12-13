@@ -48,10 +48,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <!-- Pagination Links -->
-                                    <div class="pagination">
-                                        {{ $users->links() }}
-                                    </div>
                                 </div>
                             </div>
                             <!--End Advanced Tables -->

@@ -48,7 +48,7 @@ class LocationCommand
                 ];
             } else {
                 $userLocation = UserService::getLocationByChatId($chatId);
-                if (empty($userLocation)) {
+                if (is_array($userLocation) && isset($userLocation['latitude'], $userLocation['longitude'])) {
                     Log::info('No location:', $userLocation);
                     TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjudemas! \nIltimos qaytadan manzilinggizni yuboring 👇");
                     return false;

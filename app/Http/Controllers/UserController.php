@@ -59,8 +59,6 @@ class UserController extends Controller
 
     public function delete(Request $request)
     {
-        $this->userService->delete($request);
-
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 }
