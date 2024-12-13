@@ -3,6 +3,7 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Enums\UserRoleEnum;
+use App\Enums\UserStatusEnum;
 use App\Helpers\PhoneAndDateHelper;
 use App\Helpers\TelegramBotHelper;
 use App\Models\User;
@@ -70,7 +71,7 @@ class CalendarCommand
 
             TelegramBotHelper::sendMessage($chatId, $message, null);
 
-            $user = UserService::clientCreateAndUpdate($chatId, ['date' => $data]);
+            $user = UserService::clientCreateAndUpdate($chatId, ['date' => $data, 'status' => UserStatusEnum::CREATE]);
 
             TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, $user, $language);
         } catch (\Throwable $th) {
