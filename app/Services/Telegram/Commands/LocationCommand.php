@@ -59,12 +59,11 @@ class LocationCommand
                     'latitude' => $latitude,
                     'longitude' => $longitude,
                 ];
-                
             } else {
 
                 $user = UserService::getLocationByChatId($chatId);
 
-                if (is_null($user) || !$user->latitude || !$user->longitude) {
+                if (is_null($user) || !isset($user->latitude) || !isset($user->longitude)) {
                     StartCommand::sendLanguageButtons($chatId, "Sizning ma'lumotinggiz topilmadi! Iltimos tilni tanlang:\n Ваша информация не найдена! Пожалуйста, укажите язык: 👇");
                     return false;
                 }
@@ -78,7 +77,6 @@ class LocationCommand
                     'latitude' => $user->latitude,
                     'longitude' => $user->longitude,
                 ];
-                Log::info('User:', $user->toArray());
             }
 
             UserService::clientCreateOrUpdate($chatId, $userLocation);
