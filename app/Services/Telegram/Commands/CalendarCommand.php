@@ -61,20 +61,6 @@ class CalendarCommand
 
             TelegramBotHelper::deleteMessage($chatId, $messageId);
 
-            // $userPhone = Cache::get("contact_$chatId", false);
-            // $service = Cache::get("service_$chatId", false);
-
-            // if (!$userPhone || !$service) {
-            //     $messageError = "Telefon raqami yoki xizmat turi aniqlanmadi.\nIltimos qaytadan raqam va hizmat turini tanlang:";
-            //     $messageErrorRu = "Номер телефона или тип услуги не обнаружен.\nПожалуйста, выберите номер и тип услуги еще раз:";
-
-            //     if (strval($language) === 'lang_ru') {
-            //         $messageError = $messageErrorRu;
-            //     }
-            //     TelegramBotHelper::sendMessage($chatId, $messageError);
-            //     return true;
-            // }
-
             $message = '<b>Rahmat Sizning so\'rovingiz qabul qilindi, operator tez orada siz bilan bog\'lanadi:</b>';
             $messageRu = '<b>Спасибо Ваш запрос принят, оператор свяжется с вами в ближайшее время:</b>';
 
@@ -84,7 +70,7 @@ class CalendarCommand
 
             TelegramBotHelper::sendMessage($chatId, $message);
 
-            $user = UserService::clientCreateAndUpdate($chatId, $data);
+            $user = UserService::clientCreateAndUpdate($chatId, ['date' => $data]);
 
             TelegramBotHelper::sendClientRequestMessage(self::GROUP_CHAT_ID, $user, $language);
         } catch (\Throwable $th) {
