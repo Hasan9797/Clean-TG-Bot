@@ -28,17 +28,13 @@ class TelegramBotHelper
         ]);
     }
 
-    public static function sendMessage($chatId, $message, $parseMode = 'MarkdownV2')
+    public static function sendMessage($chatId, $message)
     {
         try {
-            if ($parseMode === 'MarkdownV2') {
-                $message = self::escapeMarkdownV2($message);
-            }
 
             return Telegram::sendMessage([
                 'chat_id' => $chatId,
                 'text' => $message,
-                'parse_mode' => $parseMode, // HTML yoki MarkdownV2
             ]);
         } catch (\Throwable $th) {
             Log::error("Telegramga xabar yuborishda xatolik: " . $th->getMessage(), [

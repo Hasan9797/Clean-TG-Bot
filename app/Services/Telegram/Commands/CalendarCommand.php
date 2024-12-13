@@ -62,16 +62,14 @@ class CalendarCommand
 
             TelegramBotHelper::deleteMessage($chatId, $messageId);
 
-            $message = "<b>Rahmat Sizning so'rovingiz qabul qilindi, operator tez orada siz bilan bog'lanadi:</b>";
-            $messageRu = "<b>Спасибо Ваш запрос принят, оператор свяжется с вами в ближайшее время:</b>";
+            $message = "Rahmat Sizning so'rovingiz qabul qilindi, operator tez orada siz bilan bog'lanadi:";
+            $messageRu = "Спасибо Ваш запрос принят, оператор свяжется с вами в ближайшее время:";
 
             if (strval($language) === 'lang_ru') {
                 $message = $messageRu;
             }
 
-            $escapedMessage = htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-
-            TelegramBotHelper::sendMessage($chatId, $escapedMessage, 'HTML');
+            TelegramBotHelper::sendMessage($chatId, $message);
 
             $user = UserService::clientCreateAndUpdate($chatId, ['date' => $data, 'status' => UserStatusEnum::CREATE]);
 
