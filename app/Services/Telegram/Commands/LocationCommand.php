@@ -3,13 +3,12 @@
 namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
-use App\Services\CacheService;
 use App\Services\User\UserService;
 use Illuminate\Support\Facades\Log;
 
 class LocationCommand
 {
-    public static function handle($request)
+    public static function handel($request)
     {
         $location = $request->input('message.location') ?? $request->input('message.text');
 

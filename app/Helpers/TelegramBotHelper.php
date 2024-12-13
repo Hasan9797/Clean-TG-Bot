@@ -123,9 +123,11 @@ class TelegramBotHelper
             $replyKeyboard = [
                 [
                     [
-                        'text' => 'Joylashuvni yuborish',
+                        'text' => '📍 Joylashuvni yuborish',
                         'request_location' => true
-                    ],
+                    ]
+                ],
+                [
                     [
                         'text' => 'Oldingi manzilga',
                     ]
