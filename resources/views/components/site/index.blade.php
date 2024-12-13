@@ -1,3 +1,7 @@
+<?php
+
+use App\Enums\UserStatusEnum;
+?>
 <x-layouts.main>
     <x-slot:title>
         Dashboard
@@ -83,12 +87,14 @@
                                                 <th>Телефон</th>
                                                 <th>Услуга</th>
                                                 <th>Дата</th>
+                                                <th>Статус</th>
                                                 <th>Широта</th>
                                                 <th>Долгота</th>
                                                 <th>Создано</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+
                                             @foreach($users as $user)
                                             <tr class="odd gradeX">
                                                 <td>{{ $user->telegram_first_name }}</td>
@@ -97,6 +103,7 @@
                                                 <td>{{ $user->phone }}</td>
                                                 <td>{{ $user->service }}</td>
                                                 <td>{{ $user->date }}</td>
+                                                <td>{{<?= UserStatusEnum::getStatus($user->status) ?> }}</td>
                                                 <td>{{ $user->latitude }}</td>
                                                 <td>{{ $user->longitude }}</td>
                                                 <td>{{ $user->created_at }}</td>
