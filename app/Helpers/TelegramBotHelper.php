@@ -100,7 +100,7 @@ class TelegramBotHelper
         $messageTemplate .= "📱 *" . ($language === 'lang_ru' ? 'Номер телефона' : 'Telefon') . ":* " . $escapeMarkdown($user->phone) . "\n";
         $messageTemplate .= "🛠️ *" . ($language === 'lang_ru' ? 'Услуга' : 'Xizmat turi') . ":* " . $escapeMarkdown($user->service) . "\n";
         $messageTemplate .= "📅 *" . ($language === 'lang_ru' ? 'Дата' : 'Sana') . ":* " . $escapeMarkdown($user->date) . "\n\n";
-        $messageTemplate .= "📍 *" . ($language === 'lang_ru' ? 'Адрес местонахождения клиента:' : 'Mizjozning joylashuv manzili:');
+        $messageTemplate .= "📍 *" . ($language === 'lang_ru' ? 'Адрес местонахождения клиента:' : 'Mizjozning joylashuv manzili:*') . "\n";
 
         // Telegramga xabar yuborish
         try {

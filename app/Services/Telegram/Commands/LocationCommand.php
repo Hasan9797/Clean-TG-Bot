@@ -4,6 +4,7 @@ namespace App\Services\Telegram\Commands;
 
 use App\Helpers\TelegramBotHelper;
 use App\Services\User\UserService;
+use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Log;
 
 class LocationCommand
@@ -35,6 +36,7 @@ class LocationCommand
             if (is_string($location)) {
                 $location = UserService::getLocationByChatId($chatId);
                 if (empty($location)) {
+                    Log::info('No location:', $location);
                     TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjudemas! \nIltimos qaytadan manzilinggizni yuboring 👇");
                     return false;
                 }
