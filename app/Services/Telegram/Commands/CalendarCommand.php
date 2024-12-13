@@ -69,7 +69,9 @@ class CalendarCommand
                 $message = $messageRu;
             }
 
-            TelegramBotHelper::sendMessage($chatId, $message, null);
+            $escapedMessage = htmlspecialchars($message, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+            TelegramBotHelper::sendMessage($chatId, $escapedMessage, 'HTML');
 
             $user = UserService::clientCreateAndUpdate($chatId, ['date' => $data, 'status' => UserStatusEnum::CREATE]);
 
