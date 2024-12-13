@@ -9,15 +9,21 @@ use Illuminate\Support\Facades\Log;
 
 class LocationCommand
 {
-    public static function handel($request)
+    public static function handle($request)
     {
         $location = $request->input('message.location') ?? $request->input('message.text');
 
-        if (!$location || trim($location) != 'Oldingi manzilga') {
-            return false;
+        if (is_array($location) && isset($location['latitude']) && isset($location['longitude'])) {
+            return true;
         }
-        return true;
+
+        if (is_string($location) && trim($location) === 'Oldingi manzilga') {
+            return true;
+        }
+
+        return false;
     }
+
 
     public function execute($request)
     {
@@ -27,12 +33,12 @@ class LocationCommand
             $messageId = $request->input('message.message_id');
             $location = $request->input('message.location') ?? $request->input('message.text');
 
-            if(is_string($location)){
-               $location = UserService::getLocationByChatId($chatId);
-               if(empty($location)){
-                 TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjudemas! \nIltimos qaytadan manzilinggizni yuboring 👇");
-                 return false;
-               }
+            if (is_string($location)) {
+                $location = UserService::getLocationByChatId($chatId);
+                if (empty($location)) {
+                    TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjudemas! \nIltimos qaytadan manzilinggizni yuboring 👇");
+                    return false;
+                }
             }
 
             $userLocation = [
