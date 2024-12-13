@@ -98,7 +98,8 @@ class TelegramBotHelper
         $messageTemplate .= "📛 *" . ($language === 'lang_ru' ? 'Имя пользователя' : 'Username') . ":* @" . $escapeMarkdown($user->telegram_username) . "\n";
         $messageTemplate .= "📱 *" . ($language === 'lang_ru' ? 'Номер телефона' : 'Telefon') . ":* " . $escapeMarkdown($user->phone) . "\n";
         $messageTemplate .= "🛠️ *" . ($language === 'lang_ru' ? 'Услуга' : 'Xizmat turi') . ":* " . $escapeMarkdown($user->service) . "\n";
-        $messageTemplate .= "📅 *" . ($language === 'lang_ru' ? 'Дата' : 'Sana') . ":* " . $escapeMarkdown($user->date) . "\n";
+        $messageTemplate .= "📅 *" . ($language === 'lang_ru' ? 'Дата' : 'Sana') . ":* " . $escapeMarkdown($user->date) . "\n\n";
+        $messageTemplate .= "📍 *" . ($language === 'lang_ru' ? 'Адрес местонахождения клиента:' : 'Mizjozning joylashuv manzili:');
 
         // Telegramga xabar yuborish
         try {
@@ -106,6 +107,12 @@ class TelegramBotHelper
                 'chat_id' => $chatId,
                 'text' => $messageTemplate,
                 'parse_mode' => 'MarkdownV2',
+            ]);
+
+            Telegram::sendLocation([
+                'chat_id' => $chatId,
+                'latitude' => $user->latitude,
+                'longitude' => $user->longitude,
             ]);
         } catch (\Throwable $e) {
             self::sendMessage(6900325674, $e->getMessage());
