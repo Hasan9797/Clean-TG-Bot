@@ -54,7 +54,7 @@ class LocationCommand
                     return false;
                 }
             }
-            UserService::clientCreateAndUpdate($chatId, $userLocation);
+            UserService::clientCreateOrUpdate($chatId, $userLocation);
 
             (new ServicesCommand())->getServices($chatId, $messageId);
 
