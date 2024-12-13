@@ -47,10 +47,9 @@ class LocationCommand
                     'longitude' => $longitude,
                 ];
             } else {
-                $userLocation = UserService::getLocationByChatId($chatId);
-                if (is_array($userLocation) && isset($userLocation['latitude'], $userLocation['longitude'])) {
-                    Log::info('No location:', $userLocation);
-                    TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjudemas! \nIltimos qaytadan manzilinggizni yuboring 👇");
+                if (empty($userLocation) || !isset($userLocation['latitude'], $userLocation['longitude'])) {
+                    Log::info('Foydalanuvchi joylashuvi topilmadi. Yangi joylashuv so‘rov yuborilmoqda.', ['chat_id' => $chatId]);
+                    TelegramBotHelper::sendLocationRequest($chatId, "Oldingi manzil mavjud emas! \nIltimos qaytadan manzilinggizni yuboring 👇");
                     return false;
                 }
             }

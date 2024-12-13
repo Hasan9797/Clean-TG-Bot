@@ -55,7 +55,6 @@ class ContactCommand
                 'phone' => $phoneNumber,
                 'status' => UserStatusEnum::PENDING,
             ];
-            // User::create($user);
 
             UserService::clientCreateOrUpdate($chatId, $user);
 

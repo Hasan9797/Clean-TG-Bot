@@ -88,7 +88,7 @@ class UserService
 
     public static function getLocationByChatId($chatId)
     {
-        $user =  User::select('latitude', 'longitude')
+        $user = User::select('latitude', 'longitude')
             ->where('chat_id', intval($chatId))
             ->first();
 
