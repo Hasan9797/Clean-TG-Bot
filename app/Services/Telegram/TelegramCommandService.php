@@ -2,6 +2,7 @@
 
 namespace App\Services\Telegram;
 
+use App\Helpers\TelegramBotHelper;
 use App\Services\Telegram\Commands\CalendarCommand;
 use App\Services\Telegram\Commands\ContactCommand;
 use App\Services\Telegram\Commands\LanguageCommand;
@@ -9,6 +10,7 @@ use App\Services\Telegram\Commands\LocationCommand;
 use App\Services\Telegram\Commands\ServiceCommand;
 use App\Services\Telegram\Commands\ServicesCommand;
 use App\Services\Telegram\Commands\StartCommand;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramCommandService
 {
@@ -32,6 +34,7 @@ class TelegramCommandService
     {
         $data = $request->input('callback_query.data') ?? false;
         $chatType = $request->input('message.chat.type');
+        $chatId = $request->input('message.chat.id') ?? $request->input('callback_query.message.chat.id');
 
         if ($chatType === 'group' || $chatType === 'supergroup') {
             return false;
@@ -48,5 +51,8 @@ class TelegramCommandService
                 return (new $commandClass());
             }
         }
+
+        $message = "Nomalum So'rov yuborildi";
+        return TelegramBotHelper::sendMessage($chatId, $message);
     }
 }

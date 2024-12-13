@@ -18,10 +18,15 @@ class ContactCommand
     {
         $contact = $request->input('message.contact') ?? $request->input('message.text');
 
-        if (!$contact || PhoneAndDateHelper::isValidPhoneNumber($contact)) {
-            return false;
+        if (is_array($contact) && isset($contact['phone_number'])) {
+            return true;
         }
-        return true;
+
+        if (is_string($contact) && PhoneAndDateHelper::isValidPhoneNumber($contact)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function execute($request)
@@ -35,32 +40,27 @@ class ContactCommand
             $cachLanguage = Cache::get("language_$chatId", 'lang_uz');
 
             if ($cachLanguage == 'lang_ru') {
-                $message = 'Нажмите кнопку ниже, чтобы отправить Manzilinglife:';
+                $message = 'Нажмите кнопку ниже, чтобы отправить свой адрес:';
             }
 
             $firstName = $request->input('message.from.first_name');
             $userName = $request->input('message.from.username');
 
-            if (PhoneAndDateHelper::isValidPhoneNumber($phoneNumber)) {
 
-                $user = [
-                    'telegram_first_name' => $firstName,
-                    'telegram_username' =>  $userName,
-                    'chat_id' => $chatId,
-                    'phone' => $phoneNumber,
-                    'status' => UserStatusEnum::PINDING,
-                ];
+            $user = [
+                'telegram_first_name' => $firstName,
+                'telegram_username' =>  $userName,
+                'chat_id' => $chatId,
+                'phone' => $phoneNumber,
+                'status' => UserStatusEnum::PINDING,
+            ];
 
-                UserService::clientCreateAndUpdate($chatId, $user);
+            UserService::clientCreateAndUpdate($chatId, $user);
 
-                TelegramBotHelper::sendLocationRequest($chatId, $message);
+            TelegramBotHelper::sendLocationRequest($chatId, $message);
 
-                return true;
-            }
+            return true;
 
-            $message = 'Kontaktni yubormadingiz. Iltimos, tugmani bosing va kontakt yuboring.';
-
-            TelegramBotHelper::sendMessage($chatId, $message);
         } catch (\Throwable $th) {
             Log::error('Error: ' . $th->getMessage());
             TelegramBotHelper::sendMessage(6900325674, 'ContactCommand da Xatolik: ' . $th->getMessage());
